@@ -1,0 +1,12 @@
+{"properties": [
+    {
+        "name": "home.dir",
+        "type": "java.lang.String",
+        "description": "Location of configuration.properties file. Default: ~/sbs_shared"
+    },
+    {
+        "name": "rest.config.debug",
+        "type": "java.lang.Boolean",
+        "description": "Flag that controls if additional error debug information returned to client. Default: true"
+    }
+]}

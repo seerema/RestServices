@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<artifactId>shared-entity-rest</artifactId>
+	<packaging>jar</packaging>
+	<name>SharedEntityRest</name>
+	<description>Shared library for REST Entity Modules</description>
+	<url>http://www.seerema.com</url>
+	
+	<parent>
+		<groupId>com.seerema.rest</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.1.0</version>
+		<relativePath>../</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.seerema.rest</groupId>
+			<artifactId>shared-jpa-srv</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.seerema.rest</groupId>
+			<artifactId>shared-ui-rest</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!-- Test dependency -->
+		<dependency>
+			<groupId>com.seerema.rest</groupId>
+			<artifactId>shared-ui-config</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.seerema.rest</groupId>
+			<artifactId>shared-config</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.seerema.rest</groupId>
+			<artifactId>shared-rest-base</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>default-test-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<exclude>test.properties</exclude>
+								<exclude>logback-test.xml</exclude>
+								<exclude>data.sql</exclude>
+								<exclude>com/seerema/rest/entity/shared/TestSharedEntityRestConfiguration.class</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

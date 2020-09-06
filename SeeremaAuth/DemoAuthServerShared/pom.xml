@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<artifactId>demo-server-shared</artifactId>
+	<name>DemoAuthServerShared</name>
+	<description>Shared libraries for Demo Authentication Server based on Spring Session</description>
+	<url>http://www.seerema.com/</url>
+	
+	<parent>
+		<groupId>com.seerema.rest.auth</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.1.0</version>
+		<relativePath>../</relativePath>
+	</parent>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.seerema.rest.auth</groupId>
+			<artifactId>auth-server-shared</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.seerema.auth.provider</groupId>
+			<artifactId>tomcat-user-file</artifactId>
+			<version>${auth-provider.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.seerema.rest.auth</groupId>
+			<artifactId>auth-server-shared</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

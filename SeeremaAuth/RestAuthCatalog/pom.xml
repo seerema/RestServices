@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>catalog-rest-auth</artifactId>
+	<name>RestAuthCatalog</name>
+	<description>Catalog REST with Authentication layer</description>
+	<url>http://www.seerema.com/</url>
+
+	<parent>
+		<groupId>com.seerema.rest.auth</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.1.0</version>
+		<relativePath>../</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+      <groupId>com.seerema.rest.auth</groupId>
+      <artifactId>rest-base</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+		<dependency>
+			<groupId>com.seerema.rest</groupId>
+			<artifactId>catalog-rest-shared</artifactId>
+			<version>${seerema-rest.version}</version>
+		</dependency>
+
+		<!-- Test dependencies -->
+		<dependency>
+      <groupId>com.seerema.rest.auth</groupId>
+      <artifactId>rest-base</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    
+		<dependency>
+      <groupId>com.seerema.rest.auth</groupId>
+      <artifactId>auth-shared-rest</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.seerema.rest</groupId>
+      <artifactId>shared-rest-base</artifactId>
+      <version>${seerema-rest.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.seerema.rest</groupId>
+      <artifactId>shared-rest-config</artifactId>
+      <version>${seerema-rest.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.seerema.rest</groupId>
+      <artifactId>shared-config</artifactId>
+      <version>${seerema-rest.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/rest</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/test/filtered</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+		</profile>
+	</profiles>
+</project>

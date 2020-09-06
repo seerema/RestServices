@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>rest-base</artifactId>
+	<name>RestAuthBase</name>
+	<description>Base REST with Authentication layer</description>
+	<url>http://www.seerema.com/</url>
+
+	<parent>
+		<groupId>com.seerema.rest.auth</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.1.0</version>
+		<relativePath>../</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.seerema.rest.auth</groupId>
+			<artifactId>auth-shared-rest</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+    <dependency>
+      <groupId>com.seerema.rest</groupId>
+      <artifactId>shared-jpa-status-srv</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.seerema.rest</groupId>
+      <artifactId>shared-rest-base</artifactId>
+      <version>${seerema-rest.version}</version>
+    </dependency>
+    
+		<!-- Test dependencies -->
+		<dependency>
+      <groupId>com.seerema.rest.auth</groupId>
+      <artifactId>auth-shared-rest</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+	</dependencies>
+
+	<build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+
+          <execution>
+            <id>default-test-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+		</profile>
+	</profiles>
+</project>
