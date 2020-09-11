@@ -17,7 +17,7 @@ import com.seerema.rest.entity_ex.shared.test.EntityExControllerTest;
 /**
  * Integration test for Contact Controller
  */
-public class ContactControllerTest extends EntityExControllerTest {
+public class CustomerControllerTest extends EntityExControllerTest {
 
   // TODO Add contact & client api validation
 }

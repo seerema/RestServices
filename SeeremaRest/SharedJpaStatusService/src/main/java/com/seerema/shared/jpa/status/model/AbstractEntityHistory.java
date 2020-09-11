@@ -18,39 +18,36 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
 
 import com.seerema.shared.jpa.base.model.AbstractEntity;
+import com.seerema.shared.jpa.base.model.User;
 
 /**
- * The persistent class for the status_history database table.
+ * The persistent class for the entity_status_history database table.
  */
 
-@Entity
-@Table(name = "status_history")
-public class StatusHistory extends AbstractEntity implements Serializable {
+@MappedSuperclass
+public class AbstractEntityHistory extends AbstractEntity
+    implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Column(nullable = false)
   private Timestamp created;
 
-  // bi-directional many-to-one association to Status
-  @ManyToOne
-  @JoinColumn(name = "status_id")
-  private Status status;
-
-  // bi-directional many-to-one association to Entity
+  // uni-directional many-to-one association to Entity
   @ManyToOne
   @JoinColumn(name = "entity_id")
   private EntityEx entity;
 
-  @Column(name = "user_name", nullable = false)
-  private String userName;
+  // uni-directional many-to-one association to User
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "user_id")
+  private User user;
 
-  public StatusHistory() {
+  public AbstractEntityHistory() {
   }
 
   public Timestamp getCreated() {
@@ -66,14 +63,6 @@ public class StatusHistory extends AbstractEntity implements Serializable {
     this.created = new Timestamp(dts.toInstant(ZoneOffset.UTC).toEpochMilli());
   }
 
-  public Status getStatus() {
-    return this.status;
-  }
-
-  public void setStatus(Status status) {
-    this.status = status;
-  }
-
   public EntityEx getEntity() {
     return entity;
   }
@@ -82,11 +71,11 @@ public class StatusHistory extends AbstractEntity implements Serializable {
     this.entity = entity;
   }
 
-  public String getUserName() {
-    return userName;
+  public User getUser() {
+    return user;
   }
 
-  public void setUserName(String userName) {
-    this.userName = userName;
+  public void setUser(User user) {
+    this.user = user;
   }
 }

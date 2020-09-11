@@ -15,6 +15,10 @@ package com.seerema.shared.jpa.base;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+
+import com.seerema.shared.jpa.base.service.UserService;
+import com.seerema.shared.jpa.base.service.impl.BaseUserService;
 
 /**
  * Test Configuration for SharedJpa tests
@@ -27,5 +31,10 @@ public class SharedJpaTestAppConfig extends AbstractSharedJpaTestAppConfig {
   @Override
   protected String getTestName() {
     return "SharedJpaTest";
+  }
+
+  @Bean
+  public UserService testUserService() {
+    return new BaseUserService();
   }
 }

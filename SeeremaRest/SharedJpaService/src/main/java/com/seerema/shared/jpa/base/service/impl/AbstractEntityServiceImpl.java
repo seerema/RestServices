@@ -41,7 +41,7 @@ public abstract class AbstractEntityServiceImpl<T1 extends BaseEntity, T2 extend
 
   protected abstract CrudRepository<T1, Integer> getEntityRepo();
 
-  protected abstract Iterable<T1> findAll();
+  protected abstract Iterable<T1> findAll() throws WsSrvException;
 
   protected abstract Class<T2> getEntityDtoClass();
 

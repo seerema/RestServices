@@ -15,6 +15,13 @@ package com.seerema.rest.entity.shared;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.seerema.rest.entity.shared.controller.BaseUserController;
+import com.seerema.shared.jpa.base.service.UserService;
+import com.seerema.shared.jpa.base.service.impl.BaseUserService;
 
 /**
  * Test Configuration for Entity tests
@@ -28,5 +35,16 @@ public class TestSharedEntityRestConfiguration
   @Override
   protected String getTestName() {
     return "SharedEntityRestTest";
+  }
+
+  @Bean
+  public UserService testUserService() {
+    return new BaseUserService();
+  }
+
+  @RestController
+  @RequestMapping("/test")
+  public class TestUserController extends BaseUserController {
+
   }
 }

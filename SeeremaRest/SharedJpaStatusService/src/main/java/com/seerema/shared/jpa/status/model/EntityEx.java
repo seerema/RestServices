@@ -16,7 +16,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -33,6 +32,7 @@ import com.seerema.shared.jpa.base.model.BaseEntity;
 import com.seerema.shared.jpa.base.model.DbEntity;
 import com.seerema.shared.jpa.base.model.EntityField;
 import com.seerema.shared.jpa.base.model.FieldCategory;
+import com.seerema.shared.jpa.base.model.User;
 
 /**
  * The persistent class for the entity_ex database table.
@@ -47,8 +47,17 @@ public class EntityEx implements BaseEntity, Serializable {
   @Id
   private Integer id;
 
-  @Column(name = "user_name", nullable = false)
-  private String userName;
+  public EntityEx() {
+  }
+
+  public EntityEx(int id) {
+    setId(id);
+  }
+
+  // uni-directional many-to-one association to User
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "user_id")
+  private User user;
 
   // uni-directional one-to-one association to main entity
   @OneToOne(optional = false)
@@ -64,7 +73,12 @@ public class EntityEx implements BaseEntity, Serializable {
 
   // Delete automatically all history when entity deleted.
   @OnDelete(action = OnDeleteAction.CASCADE)
-  List<StatusHistory> statusHistories;
+  List<EntityStatusHistory> entityStatusHistories;
+
+  // bi-directional one-to-many association to statusHistory
+  @OneToMany(mappedBy = "entity", cascade = CascadeType.REFRESH)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  List<EntityUserHistory> ownerHistories;
 
   /*** NON-PRERSISTANT FIELD ***/
   @Transient
@@ -103,20 +117,20 @@ public class EntityEx implements BaseEntity, Serializable {
     this.status = status;
   }
 
-  public List<StatusHistory> getStatusHistories() {
-    return statusHistories;
+  public List<EntityStatusHistory> getStatusHistories() {
+    return entityStatusHistories;
   }
 
-  public void setStatusHistories(List<StatusHistory> statusHitories) {
-    this.statusHistories = statusHitories;
+  public void setStatusHistories(List<EntityStatusHistory> statusHitories) {
+    this.entityStatusHistories = statusHitories;
   }
 
-  public String getUserName() {
-    return this.userName;
+  public User getUser() {
+    return user;
   }
 
-  public void setUserName(String userName) {
-    this.userName = userName;
+  public void setUser(User user) {
+    this.user = user;
   }
 
   public String getName() {
@@ -149,5 +163,13 @@ public class EntityEx implements BaseEntity, Serializable {
 
   public void setFieldCat(FieldCategory fieldCat) {
     dbEntity.setFieldCat(fieldCat);
+  }
+
+  public List<EntityUserHistory> getOwnerHistories() {
+    return ownerHistories;
+  }
+
+  public void setOwnerHistories(List<EntityUserHistory> ownerHistories) {
+    this.ownerHistories = ownerHistories;
   }
 }

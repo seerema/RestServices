@@ -12,12 +12,14 @@
 
 package com.seerema.shared.ui.config.service;
 
+import com.seerema.base.WsSrvException;
+
 /**
  * BaseUI configuration customizer
  *
  */
 public interface UiConfigCutomizer {
 
-  String getPropByName(String key) throws Exception;
+  String getPropByName(String key) throws WsSrvException;
 
 }

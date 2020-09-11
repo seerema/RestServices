@@ -24,12 +24,12 @@ public class CrmConstants {
   // Module name
   public static final String MODULE_NAME = "crm";
 
-  public static String CRM_NEW_STATUS = Statuses.LL_NEW.name();
+  public static String CRM_NEW_STATUS = Statuses.LL_LEAD.name();
 
   public static final List<String> CRM_CONTACT_STATUSES =
       new ArrayList<String>();
 
   static {
-    CRM_CONTACT_STATUSES.add(Statuses.LL_NEW.name());
+    CRM_CONTACT_STATUSES.add(Statuses.LL_LEAD.name());
   }
 }

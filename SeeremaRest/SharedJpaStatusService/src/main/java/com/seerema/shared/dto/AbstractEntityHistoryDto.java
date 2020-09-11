@@ -18,39 +18,30 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.seerema.shared.jpa.status.model.StatusHistory;
-import com.seerema.srv.shared.annotations.DtoFor;
 import com.seerema.srv.shared.annotations.ModelItem;
 
 /**
- * The persistent class for the status_history database table.
+ * The persistent class for the entity_status_history database table.
  *
  * @param <EntityExDto> Entity
  * @param <Status> Status
  */
 
-@DtoFor(StatusHistory.class)
-public class StatusHistoryDto extends AbstractEntityDto {
+public class AbstractEntityHistoryDto extends AbstractEntityDto {
 
   @NotNull
   @ModelItem
-  LocalDateTime created;
-
-  @NotNull
-  @ModelItem
-  StatusDto status;
+  private LocalDateTime created;
 
   @NotNull
   @ModelItem(setter = false)
-  EntityExDto entity;
+  private EntityExDto entity;
 
   @ModelItem(getter = false)
-  @Size(max = 63)
-  private String userName;
+  private UserDto user;
 
   public LocalDateTime getCreated() {
     return created;
@@ -67,14 +58,6 @@ public class StatusHistoryDto extends AbstractEntityDto {
         .ofInstant(Instant.ofEpochMilli(created.getTime()), ZoneOffset.UTC);
   }
 
-  public StatusDto getStatus() {
-    return status;
-  }
-
-  public void setStatus(StatusDto status) {
-    this.status = status;
-  }
-
   public EntityExDto getEntity() {
     return entity;
   }
@@ -83,11 +66,11 @@ public class StatusHistoryDto extends AbstractEntityDto {
     this.entity = entity;
   }
 
-  public String getUserName() {
-    return userName;
+  public UserDto getUser() {
+    return user;
   }
 
-  public void setUserName(String userName) {
-    this.userName = userName;
+  public void setUser(UserDto user) {
+    this.user = user;
   }
 }

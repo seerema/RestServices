@@ -26,6 +26,6 @@ import com.seerema.rest.entity.shared.controller.EntityFieldController;
 @Validated
 @RestController
 @RequestMapping("/" + CrmConstants.MODULE_NAME)
-public class ContactFieldController extends EntityFieldController {
+public class CustomerFieldController extends EntityFieldController {
 
 }

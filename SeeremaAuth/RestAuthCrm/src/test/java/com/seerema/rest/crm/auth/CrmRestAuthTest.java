@@ -46,10 +46,16 @@ public class CrmRestAuthTest extends SharedModRestAuthTest {
         "\"field_category\":\\{\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false\\}," +
         "\"read_only\":false\\},\"value\":\"Test\"\\}\\],\"field_cat\":\\{" +
         "\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false\\},\"status\":\\{" +
-        "\"id\":1\\,\"name\":\"LL_NEW\"},\"status_histories\":\\[\\{\"id\":1," +
-        "\"status\":\\{\"id\":1\\,\"name\":\"LL_NEW\"}," +
-        "\"user_name\":\"foo\"," + SharedRestConstants.CREATED_FIELD_PATTERN +
-        "\\}\\],\"user_name\":\"foo\"\\}";
+        "\"id\":1,\"name\":\"LL_LEAD\"}," +
+        "\"status_histories\":\\[\\{\"id\":1," +
+        "\"user\":\\{\"id\":1,\"name\":\"foo\"\\}," +
+        "\"status\":\\{\"id\":1,\"name\":\"LL_LEAD\"}," +
+        SharedRestConstants.CREATED_FIELD_PATTERN + "\\}\\]" +
+        ",\"owner_histories\":\\[\\{\"id\":1," +
+        "\"user\":\\{\"id\":1,\"name\":\"foo\"}," +
+        "\"owner\":\\{\"id\":1,\"name\":\"foo\"}," +
+        SharedRestConstants.CREATED_FIELD_PATTERN + "\\}\\]" +
+        ",\"user\":\\{\"id\":1,\"name\":\"foo\"\\}\\}";
   }
 
   @Override
@@ -59,9 +65,15 @@ public class CrmRestAuthTest extends SharedModRestAuthTest {
         "\"field_category\":\\{\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false\\}," +
         "\"read_only\":false\\},\"value\":\"Test\"\\}\\],\"field_cat\":\\{" +
         "\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false\\},\"status\":\\{" +
-        "\"id\":1,\"name\":\"LL_NEW\"\\},\"status_histories\":\\[\\{\"id\":1," +
-        "\"status\":\\{\"id\":1,\"name\":\"LL_NEW\"\\},\"user_name\":\"foo\"," +
-        SharedRestConstants.CREATED_FIELD_PATTERN +
-        "\\}\\],\"user_name\":\"foo\"\\}\\]\\}$";
+        "\"id\":1,\"name\":\"LL_LEAD\"\\}," +
+        "\"status_histories\":\\[\\{\"id\":1," +
+        "\"user\":\\{\"id\":1,\"name\":\"foo\"\\}," +
+        "\"status\":\\{\"id\":1,\"name\":\"LL_LEAD\"\\}," +
+        SharedRestConstants.CREATED_FIELD_PATTERN + "\\}\\]" +
+        ",\"owner_histories\":\\[\\{\"id\":1," +
+        "\"user\":\\{\"id\":1,\"name\":\"foo\"}," +
+        "\"owner\":\\{\"id\":1,\"name\":\"foo\"}," +
+        SharedRestConstants.CREATED_FIELD_PATTERN + "\\}\\]" +
+        ",\"user\":\\{\"id\":1,\"name\":\"foo\"\\}\\}\\]\\}$";
   }
 }

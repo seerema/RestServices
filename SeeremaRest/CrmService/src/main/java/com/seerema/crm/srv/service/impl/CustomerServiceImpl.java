@@ -17,8 +17,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.seerema.base.WsSrvException;
-import com.seerema.crm.srv.jpa.repo.ContactRepo;
-import com.seerema.crm.srv.service.ContactService;
+import com.seerema.crm.srv.jpa.repo.CustomerRepo;
+import com.seerema.crm.srv.service.CustomerService;
 import com.seerema.crm.srv.shared.CrmConstants;
 import com.seerema.crm.srv.shared.ErrorCodes;
 import com.seerema.shared.jpa.status.model.EntityEx;
@@ -29,20 +29,20 @@ import com.seerema.shared.rest.response.DataGoodResponse;
  * Implementation for Contact Service
  */
 @Service
-public class ContactServiceImpl extends AbstractEntityStatusServiceImpl
-    implements ContactService {
+public class CustomerServiceImpl extends AbstractEntityStatusServiceImpl
+    implements CustomerService {
 
   @Autowired
-  private ContactRepo _repo;
+  private CustomerRepo _repo;
 
   @Override
-  public DataGoodResponse findUserContacts(String username)
+  public DataGoodResponse findUserLeads(String username)
       throws WsSrvException {
     Iterable<EntityEx> quests;
 
     try {
       quests =
-          _repo.findUserContacts(CrmConstants.CRM_CONTACT_STATUSES, username);
+          _repo.findUserLeads(CrmConstants.CRM_CONTACT_STATUSES, username);
     } catch (DataAccessException e) {
       throw throwError(ErrorCodes.ERROR_READ_USER_CONTACTS.name(), e);
     }
@@ -52,13 +52,13 @@ public class ContactServiceImpl extends AbstractEntityStatusServiceImpl
   }
 
   @Override
-  public DataGoodResponse findUserClients(String username)
+  public DataGoodResponse findUserCustomers(String username)
       throws WsSrvException {
     Iterable<EntityEx> quests;
 
     try {
       quests =
-          _repo.findUserClients(CrmConstants.CRM_CONTACT_STATUSES, username);
+          _repo.findUserCustomers(CrmConstants.CRM_CONTACT_STATUSES, username);
     } catch (DataAccessException e) {
       throw throwError(ErrorCodes.ERROR_READ_USER_CLIENTS.name(), e);
     }

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seerema.base.WsSrvException;
-import com.seerema.crm.srv.service.ContactService;
+import com.seerema.crm.srv.service.CustomerService;
 import com.seerema.crm.srv.shared.CrmConstants;
 import com.seerema.rest.entity_ex.shared.controller.EntityExController;
 import com.seerema.shared.rest.response.DataGoodResponse;
@@ -34,24 +34,24 @@ import com.seerema.shared.rest.response.DataGoodResponse;
 @Validated
 @RestController
 @RequestMapping("/" + CrmConstants.MODULE_NAME)
-public class ContactController extends EntityExController {
+public class CustomerController extends EntityExController {
 
   @Autowired
-  private ContactService _service;
+  private CustomerService _service;
 
   /****************** USER API ******************/
 
-  @RequestMapping(value = "/entities/contact", method = RequestMethod.GET,
+  @RequestMapping(value = "/entities/lead", method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public DataGoodResponse readUserContacts(HttpServletRequest req)
+  public DataGoodResponse readUserLeads(HttpServletRequest req)
       throws WsSrvException {
-    return _service.findUserContacts(getUserName(req));
+    return _service.findUserLeads(getUserName(req));
   }
 
-  @RequestMapping(value = "/entities/client", method = RequestMethod.GET,
+  @RequestMapping(value = "/entities/customer", method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public DataGoodResponse readUserClients(HttpServletRequest req)
+  public DataGoodResponse readUserCustomers(HttpServletRequest req)
       throws WsSrvException {
-    return _service.findUserClients(getUserName(req));
+    return _service.findUserCustomers(getUserName(req));
   }
 }

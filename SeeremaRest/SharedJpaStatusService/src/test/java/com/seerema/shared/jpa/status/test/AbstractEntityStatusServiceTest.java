@@ -34,10 +34,12 @@ import com.seerema.shared.Constants;
 import com.seerema.shared.dto.EntityDto;
 import com.seerema.shared.dto.EntityExDto;
 import com.seerema.shared.dto.EntityFieldDto;
+import com.seerema.shared.dto.EntityStatusHistoryDto;
+import com.seerema.shared.dto.EntityUserHistoryDto;
 import com.seerema.shared.dto.FieldCategoryDto;
 import com.seerema.shared.dto.FieldDto;
 import com.seerema.shared.dto.StatusDto;
-import com.seerema.shared.dto.StatusHistoryDto;
+import com.seerema.shared.dto.UserDto;
 import com.seerema.shared.jpa.base.model.DbEntity;
 import com.seerema.shared.jpa.base.model.EntityField;
 import com.seerema.shared.jpa.base.model.Field;
@@ -59,7 +61,8 @@ import com.seerema.shared.rest.response.DataGoodResponse;
 @TestPropertySource("classpath:/test.properties")
 public abstract class AbstractEntityStatusServiceTest {
 
-  // Test user name
+  // Test user name & id
+  private static final int TEST_USER_ID = 2;
   private static final String TEST_USER_NAME = "user";
 
   @Autowired
@@ -188,7 +191,7 @@ public abstract class AbstractEntityStatusServiceTest {
         (EntityExDto) entityExSrv.createEntity(dto).getData().get(0);
 
     // Test values
-    assertEquals(Constants.ANONYMOUS_USER, dto1.getUserName(),
+    assertEquals(Constants.ANONYMOUS_USER, dto1.getUser().getName(),
         "Entity UserName doesn't match.");
     assertEquals(dto.getName(), dto1.getName(), "Entity name doesn't match.");
     List<?> nfields = dto1.getEntityFields();
@@ -204,7 +207,11 @@ public abstract class AbstractEntityStatusServiceTest {
       assertNull(nfield.getEntity());
     }
 
+    // Check initial status
     checkEntityStatus(dto1, 1, Constants.ANONYMOUS_USER);
+
+    // Check initial owner
+    checkEntityOwner(dto1, 1, Constants.ANONYMOUS_USER);
 
     // Check list of all entities
     checkAllEntitiesList(2, "Entities");
@@ -226,11 +233,12 @@ public abstract class AbstractEntityStatusServiceTest {
 
     // Update entity with different user
     try {
-      entityExSrv.updateEntity(dto1, TEST_USER_NAME, false).getData().get(0);
+      updateEntityUser(dto1, false);
       fail("USER_ACCESS_DENIED Exception expected");
     } catch (WsSrvException e) {
       assertEquals(ErrorCodes.USER_ACCESS_DENIED.name(), e.getErrorCode());
     }
+
     // Update entity with different user but manager role
     EntityExDto dto2 = updateEntityUser(dto1);
     assertEquals(name, dto2.getName());
@@ -253,7 +261,8 @@ public abstract class AbstractEntityStatusServiceTest {
 
     // remove entity field
     dto2.getEntityFields().remove(0);
-    EntityExDto dto3 = updateEntityUser(dto2);
+    // Update entity with user owner
+    EntityExDto dto3 = updateEntity(dto2);
 
     // Check for new field set
     ufields = dto3.getEntityFields();
@@ -275,6 +284,9 @@ public abstract class AbstractEntityStatusServiceTest {
 
     // Update entity with new status
     EntityExDto dto4 = updateEntityUser(dto3);
+
+    // Check entity ownership didn't change but status registered for different user
+    assertEquals(dto4.getUser().getName(), Constants.ANONYMOUS_USER);
     checkEntityStatus(dto4, 2, TEST_USER_NAME);
 
     /******** DTO 5 ********/
@@ -283,7 +295,19 @@ public abstract class AbstractEntityStatusServiceTest {
     String value = "==" + qfd.getValue();
     qfd.setValue(value);
 
-    EntityExDto dto5 = updateEntity(dto4);
+    // Set new entity ownership
+    UserDto udto = new UserDto();
+    udto.setId(TEST_USER_ID);
+    udto.setName(TEST_USER_NAME);
+    dto4.setUser(udto);
+    EntityExDto dto5 = updateEntityUser(dto4);
+
+    // Check entity ownership changed
+    assertEquals(TEST_USER_NAME, dto5.getUser().getName(),
+        "New entity ownership doesn't match");
+
+    // Check ownership history
+    checkEntityOwner(dto5, 2, TEST_USER_NAME);
 
     assertEquals(value, dto5.getEntityFields().get(0).getValue(),
         "DTO4 EntityField value #0 doesn't match.");
@@ -319,8 +343,13 @@ public abstract class AbstractEntityStatusServiceTest {
 
   private EntityExDto updateEntityUser(EntityExDto entity)
       throws WsSrvException {
-    return (EntityExDto) entityExSrv.updateEntity(entity, TEST_USER_NAME, true)
-        .getData().get(0);
+    return updateEntityUser(entity, true);
+  }
+
+  private EntityExDto updateEntityUser(EntityExDto entity,
+      boolean allowOverride) throws WsSrvException {
+    return (EntityExDto) entityExSrv
+        .updateEntity(entity, TEST_USER_NAME, allowOverride).getData().get(0);
   }
 
   private EntityFieldDto getTestEntityFieldDto(int id, String value) {
@@ -347,17 +376,44 @@ public abstract class AbstractEntityStatusServiceTest {
   private void checkEntityLastStatus(EntityExDto entity, String username) {
     StatusDto status = entity.getStatus();
 
-    List<?> list = entity.getStatusHistories();
+    List<EntityStatusHistoryDto> list = entity.getStatusHistories();
     assertNotNull(list, "Entity Status History is empty");
 
-    StatusHistoryDto sh = (StatusHistoryDto) list.get(list.size() - 1);
+    EntityStatusHistoryDto sh = list.get(list.size() - 1);
     assertNotNull(sh.getCreated(), "Created time for status history is NULL");
     assertEquals(status.getName(), sh.getStatus().getName(),
         "Entity Status History last status doesn't match expected");
 
     if (username != null)
-      assertEquals(username, sh.getUserName(),
+      assertEquals(username, sh.getUser().getName(),
           "Entity Status History username last status doesn't match expected");
+
+  }
+
+  private void checkEntityOwner(EntityExDto entity, int size, String username) {
+    List<?> list = entity.getOwnerHistories();
+    assertNotNull(list, "Entity Owner History is empty");
+
+    assertEquals(size, list.size(),
+        "Entity Owner History size doesn't match expected");
+
+    checkEntityLastOwner(entity, username);
+  }
+
+  private void checkEntityLastOwner(EntityExDto entity, String username) {
+    UserDto owner = entity.getUser();
+
+    List<EntityUserHistoryDto> list = entity.getOwnerHistories();
+    assertNotNull(list, "Entity User History is empty");
+
+    EntityUserHistoryDto oh = list.get(list.size() - 1);
+    assertNotNull(oh.getCreated(), "Created time for owner history is NULL");
+    assertEquals(owner.getName(), oh.getOwner().getName(),
+        "Entity User History last status doesn't match expected");
+
+    if (username != null)
+      assertEquals(username, oh.getUser().getName(),
+          "Entity User History username last status doesn't match expected");
 
   }
 

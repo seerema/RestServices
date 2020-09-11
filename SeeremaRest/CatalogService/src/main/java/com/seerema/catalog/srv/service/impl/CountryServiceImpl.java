@@ -13,9 +13,11 @@
 package com.seerema.catalog.srv.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
+import com.seerema.base.WsSrvException;
 import com.seerema.catalog.srv.dto.CountryDto;
 import com.seerema.catalog.srv.jpa.model.Country;
 import com.seerema.catalog.srv.jpa.repo.CountryRepo;
@@ -38,8 +40,12 @@ public class CountryServiceImpl
   }
 
   @Override
-  protected Iterable<Country> findAll() {
-    return _repo.findAllByOrderByNameAsc();
+  protected Iterable<Country> findAll() throws WsSrvException {
+    try {
+      return _repo.findAllByOrderByNameAsc();
+    } catch (DataAccessException e) {
+      throw throwError(ErrorCodes.ERROR_FIND_ALL_COUNTRIES.name(), e);
+    }
   }
 
   @Override

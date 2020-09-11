@@ -20,5 +20,5 @@ package com.seerema.crm.srv.shared;
  */
 public enum Statuses {
 
-  LL_NEW, LL_CONFIRMED, LL_INACTIVE
+  LL_LEAD, LL_CUSTOMER, LL_INACTIVE
 }

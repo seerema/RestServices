@@ -13,9 +13,11 @@
 package com.seerema.catalog.srv.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
+import com.seerema.base.WsSrvException;
 import com.seerema.catalog.srv.dto.CityDto;
 import com.seerema.catalog.srv.jpa.model.City;
 import com.seerema.catalog.srv.jpa.repo.CityRepo;
@@ -37,8 +39,12 @@ public class CityServiceImpl extends AbstractEntityServiceImpl<City, CityDto> {
   }
 
   @Override
-  protected Iterable<City> findAll() {
-    return _repo.findAllByOrderByNameAsc();
+  protected Iterable<City> findAll() throws WsSrvException {
+    try {
+      return _repo.findAllByOrderByNameAsc();
+    } catch (DataAccessException e) {
+      throw throwError(ErrorCodes.ERROR_FIND_ALL_CITIES.name(), e);
+    }
   }
 
   @Override

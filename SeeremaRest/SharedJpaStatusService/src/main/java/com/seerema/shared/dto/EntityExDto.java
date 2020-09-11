@@ -15,8 +15,6 @@ package com.seerema.shared.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seerema.shared.jpa.status.model.EntityEx;
 import com.seerema.srv.shared.annotations.DtoFor;
@@ -27,7 +25,7 @@ import com.seerema.srv.shared.annotations.ModelItem;
  *
  * @param <T1> EntityDto
  * @param <StatusDto> StatusDto
- * @param <StatusHistoryDto> StatusHistoryDto
+ * @param <EntityStatusHistoryDto> StatusHistoryDto
  * @param <EntityFieldDto> EntityFieldDto
  * @param <FieldCategoryDto> FieldCategoryDto
  */
@@ -44,11 +42,13 @@ public class EntityExDto extends EntityDto {
   private StatusDto status;
 
   @ModelItem(getter = false)
-  private List<StatusHistoryDto> statusHistories;
+  private List<EntityStatusHistoryDto> statusHistories;
 
   @ModelItem(getter = false)
-  @Size(max = 63)
-  private String userName;
+  private List<EntityUserHistoryDto> ownerHistories;
+
+  @ModelItem(getter = false)
+  private UserDto user;
 
   public StatusDto getStatus() {
     return status;
@@ -58,27 +58,27 @@ public class EntityExDto extends EntityDto {
     this.status = status;
   }
 
-  public List<StatusHistoryDto> getStatusHistories() {
+  public List<EntityStatusHistoryDto> getStatusHistories() {
     return statusHistories;
   }
 
-  public void setStatusHistories(List<StatusHistoryDto> statusHistories) {
+  public void setStatusHistories(List<EntityStatusHistoryDto> statusHistories) {
     this.statusHistories = statusHistories;
   }
 
-  public void addStatusHistory(StatusHistoryDto statusHistory) {
+  public void addStatusHistory(EntityStatusHistoryDto statusHistory) {
     if (statusHistories == null)
       statusHistories = new ArrayList<>();
 
     statusHistories.add(statusHistory);
   }
 
-  public String getUserName() {
-    return this.userName;
+  public UserDto getUser() {
+    return user;
   }
 
-  public void setUserName(String userName) {
-    this.userName = userName;
+  public void setUser(UserDto user) {
+    this.user = user;
   }
 
   public EntityDto getEntity() {
@@ -92,4 +92,18 @@ public class EntityExDto extends EntityDto {
     this.entity = entity;
   }
 
+  public List<EntityUserHistoryDto> getOwnerHistories() {
+    return ownerHistories;
+  }
+
+  public void setOwnerHistories(List<EntityUserHistoryDto> ownerHistories) {
+    this.ownerHistories = ownerHistories;
+  }
+
+  public void addOwnerHistory(EntityUserHistoryDto ownerHistory) {
+    if (ownerHistories == null)
+      ownerHistories = new ArrayList<>();
+
+    ownerHistories.add(ownerHistory);
+  }
 }

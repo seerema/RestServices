@@ -116,6 +116,6 @@ public class ConfigruationStateTest extends SharedCatalogServiceTestUnits {
 
     // Setup workflow completed
     assertEquals("", _custom.getPropByName("state_to_continue"));
-  }
 
+  }
 }

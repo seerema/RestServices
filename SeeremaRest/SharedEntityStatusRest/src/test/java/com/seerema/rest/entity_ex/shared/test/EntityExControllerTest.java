@@ -71,15 +71,27 @@ public class EntityExControllerTest
         ((LinkedHashMap<?, ?>) ent.get("status")).get("id"));
 
     // Check list of status histories
-    @SuppressWarnings("unchecked")
-    List<LinkedHashMap<?, ?>> list =
-        (List<LinkedHashMap<?, ?>>) ent.get("status_histories");
-    assertNotNull(list);
-    assertEquals(2, list.size());
+    List<LinkedHashMap<?, ?>> list = getLinkedMap(ent, "status_histories", 2);
 
     for (int i = 0; i < 2; i++)
       assertEquals(i + 1,
           ((LinkedHashMap<?, ?>) ((LinkedHashMap<?, ?>) list.get(i))
               .get("status")).get("id"));
+
+    // Check ownership history
+    List<LinkedHashMap<?, ?>> olst = getLinkedMap(ent, "owner_histories", 1);
+    assertEquals(1,
+        ((LinkedHashMap<?, ?>) ((LinkedHashMap<?, ?>) olst.get(0)).get("owner"))
+            .get("id"));
+  }
+
+  private List<LinkedHashMap<?, ?>> getLinkedMap(LinkedHashMap<?, ?> ent,
+      String key, int size) {
+    @SuppressWarnings("unchecked")
+    List<LinkedHashMap<?, ?>> list = (List<LinkedHashMap<?, ?>>) ent.get(key);
+    assertNotNull(list);
+    assertEquals(size, list.size());
+
+    return list;
   }
 }

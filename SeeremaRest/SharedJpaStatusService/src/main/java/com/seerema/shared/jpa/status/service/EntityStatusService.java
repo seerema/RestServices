@@ -27,15 +27,14 @@ import com.seerema.shared.rest.response.DataGoodResponse;
 public interface EntityStatusService<T1 extends BaseEntity, T2 extends AbstractEntityDto>
     extends BaseEntityService<T1, T2> {
 
-  public DataGoodResponse createEntity(T2 entity, String userName)
+  DataGoodResponse createEntity(T2 entity, String userName)
       throws WsSrvException;
 
-  public DataGoodResponse updateEntity(T2 entity, String userName,
+  DataGoodResponse updateEntity(T2 entity, String userName,
       Boolean allowOverride) throws WsSrvException;
 
-  public DataGoodResponse readEntity(Integer id, String userName)
+  DataGoodResponse readEntity(Integer id, String userName)
       throws WsSrvException;
 
-  public DataGoodResponse readEntities(String userName) throws WsSrvException;
-
+  DataGoodResponse readEntities(String userName) throws WsSrvException;
 }

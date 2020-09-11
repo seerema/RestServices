@@ -12,8 +12,6 @@
 
 package com.seerema.shared.jpa.status.service.impl;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -27,17 +25,22 @@ import com.seerema.base.WsSrvException;
 import com.seerema.shared.Constants;
 import com.seerema.shared.dto.EntityDto;
 import com.seerema.shared.dto.EntityExDto;
+import com.seerema.shared.dto.EntityStatusHistoryDto;
+import com.seerema.shared.dto.EntityUserHistoryDto;
 import com.seerema.shared.dto.ModuleDto;
 import com.seerema.shared.dto.StatusDto;
-import com.seerema.shared.dto.StatusHistoryDto;
 import com.seerema.shared.jpa.base.model.DbEntity;
+import com.seerema.shared.jpa.base.model.User;
+import com.seerema.shared.jpa.base.repo.UserRepo;
 import com.seerema.shared.jpa.base.service.EntityService;
 import com.seerema.shared.jpa.base.service.impl.AbstractEntityServiceImpl;
 import com.seerema.shared.jpa.status.model.EntityEx;
+import com.seerema.shared.jpa.status.model.EntityStatusHistory;
+import com.seerema.shared.jpa.status.model.EntityUserHistory;
 import com.seerema.shared.jpa.status.model.Status;
-import com.seerema.shared.jpa.status.model.StatusHistory;
 import com.seerema.shared.jpa.status.repo.EntityExRepo;
-import com.seerema.shared.jpa.status.repo.StatusHistoryRepo;
+import com.seerema.shared.jpa.status.repo.EntityStatusHistoryRepo;
+import com.seerema.shared.jpa.status.repo.EntityUserHistoryRepo;
 import com.seerema.shared.jpa.status.repo.StatusRepo;
 import com.seerema.shared.jpa.status.service.EntityStatusService;
 import com.seerema.shared.jpa.status.shared.ErrorCodes;
@@ -57,16 +60,22 @@ public abstract class AbstractEntityStatusServiceImpl
   protected abstract String getNewStatus();
 
   @Autowired
-  EntityService<DbEntity, EntityDto> _srv;
+  private EntityService<DbEntity, EntityDto> _srv;
 
   @Autowired
-  EntityExRepo _repo;
+  private EntityExRepo _repo;
 
   @Autowired
-  StatusRepo _srepo;
+  private StatusRepo _srepo;
 
   @Autowired
-  StatusHistoryRepo _shrepo;
+  private EntityStatusHistoryRepo _shrepo;
+
+  @Autowired
+  private UserRepo _users;
+
+  @Autowired
+  private EntityUserHistoryRepo _uhrepo;
 
   @Autowired
   private ModuleDto _mod;
@@ -165,7 +174,8 @@ public abstract class AbstractEntityStatusServiceImpl
     dto.setStatus(new StatusDto(status.getId()));
 
     // Inject user name directly into DB Entity since it's not mapped by DTO
-    EntityEx entity = insertUserName(dto, userName);
+    User owner = findUser(userName);
+    EntityEx entity = insertUserName(dto, owner);
 
     // First save slave entity
     DbEntity dbe = _srv.createRawEntity(entity.getDbEntity());
@@ -176,8 +186,11 @@ public abstract class AbstractEntityStatusServiceImpl
 
     EntityExDto dnew = getEntityMapper().map(ex, EntityExDto.class);
 
-    // Than save first history for new status
-    insertStatusHistory(dnew, userName);
+    // Save first history for new status
+    insertEntityStatusHistory(dnew, owner);
+
+    // Save initial owner
+    insertEntityOwnerHistory(dnew, owner);
 
     return new DataGoodResponse(dnew);
   }
@@ -185,6 +198,9 @@ public abstract class AbstractEntityStatusServiceImpl
   @Transactional
   private DataGoodResponse updateEntityEx(EntityExDto dto, String userName,
       Boolean allowOverride) throws WsSrvException {
+    // Find authorized user
+    User authz = findUser(userName);
+
     // Get the previous status
     EntityEx dprev = readRawEntity(dto.getId());
 
@@ -195,16 +211,23 @@ public abstract class AbstractEntityStatusServiceImpl
           "Entity with id #" + dto.getId() + " not found");
 
     // Check if username matches
-    if (!(dprev.getUserName().equals(userName) || allowOverride))
+    if (!(dprev.getUser().equals(authz) || allowOverride))
       throw new WsSrvException(ErrorCodes.USER_ACCESS_DENIED.name(),
-          "Username for update doesn't match existing", "Existing username [" +
-              dprev.getUserName() + "] != request username [" + userName + "]");
+          "Username for update doesn't match existing",
+          "Existing username [" + dprev.getUser().getName() +
+              "] != request username [" + userName + "]");
 
     // Remember old status
     int status = dprev.getStatus().getId();
 
-    // Inject same user name directly into DB Entity since it's not mapped by DTO
-    EntityEx entity = insertUserName(dto, dprev.getUserName());
+    // Remember old user
+    int uid = dprev.getUser().getId();
+
+    // Inject user directly into DB Entity since it's not mapped by DTO
+    // If user is not defined than take existing user
+    boolean fuser = dto.getUser() != null;
+    EntityEx entity = insertUserName(dto, fuser
+        ? new User(dto.getUser().getId(), dto.getUser().getName()) : authz);
 
     // First save slave entity
     DbEntity dbe = _srv.updateEntity(entity.getDbEntity());
@@ -217,70 +240,55 @@ public abstract class AbstractEntityStatusServiceImpl
 
     // Insert hew history if status changed
     if (status != dto.getStatus().getId())
-      insertStatusHistory(dnew, userName);
+      insertEntityStatusHistory(dnew, authz);
+
+    // Insert new owner history if owner changed
+    if (fuser && uid != dto.getUser().getId())
+      insertEntityOwnerHistory(dnew, authz);
 
     return new DataGoodResponse(dnew);
   }
 
-  private EntityEx insertUserName(EntityExDto dto, String userName)
+  private EntityEx insertUserName(EntityExDto dto, User user)
       throws WsSrvException {
-    @SuppressWarnings("unchecked")
-    Class<EntityEx> clazz = (Class<EntityEx>) getDtoDestClass(dto);
-
-    EntityEx entity = getEntityMapper().convert(dto, clazz);
+    EntityEx entity = getEntityMapper().convert(dto, EntityEx.class);
 
     // Check if username needs to be injected
-    if (userName != null)
-      entity.setUserName(userName);
+    if (user != null)
+      entity.setUser(user);
 
     return entity;
   }
 
-  private void insertStatusHistory(EntityExDto dto, String userName)
+  private void insertEntityStatusHistory(EntityExDto dto, User user)
       throws WsSrvException {
 
-    // Create status history raw record
-    StatusHistoryDto sh = new StatusHistoryDto();
-    sh.setStatus(dto.getStatus());
-    sh.setCreated(LocalDateTime.now(ZoneOffset.UTC));
-
-    @SuppressWarnings("unchecked")
-    Class<StatusHistory> clazz = (Class<StatusHistory>) getDtoDestClass(sh);
-
-    // Entity and created date needs to be injected directly into db model since it's not mapped by dto
-    StatusHistory model = getEntityMapper().convert(sh, clazz);
-    model.setEntity(getEntity(dto));
-    model.setUserName(userName);
-
-    StatusHistory saved;
+    EntityStatusHistory saved;
     try {
-      saved = _shrepo.save(model);
-      sh.setId(saved.getId());
-      sh.setUserName(userName);
+      saved = _shrepo.save(new EntityStatusHistory(new EntityEx(dto.getId()),
+          new Status(dto.getStatus().getId(), dto.getStatus().getName()),
+          user));
     } catch (DataAccessException e) {
-      throw throwError(
-          com.seerema.shared.jpa.status.shared.ErrorCodes.ERROR_CREATE_STATUS_HISTORY
-              .name(),
-          e);
+      throw throwError(ErrorCodes.ERROR_CREATE_STATUS_HISTORY.name(), e);
     }
 
-    dto.addStatusHistory(sh);
+    dto.addStatusHistory(
+        getEntityMapper().map(saved, EntityStatusHistoryDto.class));
   }
 
-  private EntityEx getEntity(EntityExDto dto) throws WsSrvException {
-    @SuppressWarnings("unchecked")
-    Class<EntityEx> clazz = (Class<EntityEx>) getDtoDestClass(dto);
+  private void insertEntityOwnerHistory(EntityExDto dto, User user)
+      throws WsSrvException {
 
-    // Instantiate new entity
-    EntityEx entity;
+    EntityUserHistory saved;
     try {
-      entity = clazz.newInstance();
-    } catch (InstantiationException | IllegalAccessException e) {
-      throw new WsSrvException(ErrorCodes.ERROR_INIT_ENTITY_EX.name(), e);
+      saved = _uhrepo.save(new EntityUserHistory(new EntityEx(dto.getId()),
+          new User(dto.getUser().getId(), dto.getUser().getName()), user));
+    } catch (DataAccessException e) {
+      throw throwError(ErrorCodes.ERROR_CREATE_STATUS_HISTORY.name(), e);
     }
 
-    entity.setId(dto.getId());
-    return entity;
+    dto.addOwnerHistory(
+        getEntityMapper().map(saved, EntityUserHistoryDto.class));
   }
 
   @Override
@@ -321,5 +329,20 @@ public abstract class AbstractEntityStatusServiceImpl
   @Override
   protected String getEntityDeleteErrorCode() {
     return ErrorCodes.ERROR_DELETE_ENTITY_EX.name();
+  }
+
+  /**
+   * Find user by name
+   * 
+   * @param userName User Name
+   * @return User model
+   * @throws WsSrvException 
+   */
+  private User findUser(String userName) throws WsSrvException {
+    try {
+      return _users.findByName(userName);
+    } catch (DataAccessException e) {
+      throw throwError(ErrorCodes.ERROR_FIND_USER.name(), e);
+    }
   }
 }

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.seerema.base.WsSrvException;
 import com.seerema.shared.service.impl.BaseServiceImpl;
 import com.seerema.shared.ui.config.UiConfig;
 import com.seerema.shared.ui.config.service.UiConfigCutomizer;
@@ -53,7 +54,7 @@ public class UiConfigServiceImpl extends BaseServiceImpl
         if (_custom != null) {
           try {
             map.put(key, _custom.getPropByName(key));
-          } catch (Exception e1) {
+          } catch (WsSrvException e1) {
             // Skip configuration parameter if missing in a bean 
             getLogger().error(e.getMessage());
           }

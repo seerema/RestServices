@@ -15,10 +15,10 @@ package com.seerema.shared.jpa.status.repo;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.seerema.shared.jpa.status.model.StatusHistory;
+import com.seerema.shared.jpa.status.model.EntityUserHistory;
 
 @Repository
-public interface StatusHistoryRepo
-    extends CrudRepository<StatusHistory, Integer> {
+public interface EntityUserHistoryRepo
+    extends CrudRepository<EntityUserHistory, Integer> {
 
 }

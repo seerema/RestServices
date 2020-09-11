@@ -22,15 +22,15 @@ import com.seerema.crm.srv.shared.CrmConstants;
 import com.seerema.shared.jpa.status.model.EntityEx;
 
 @Repository
-public interface ContactRepo extends CrudRepository<EntityEx, Integer> {
+public interface CustomerRepo extends CrudRepository<EntityEx, Integer> {
 
-  @Query("SELECT e FROM EntityEx e, Status s, Module m WHERE m.name = '" +
+  @Query("SELECT e FROM EntityEx e, Status s, Module m, User u WHERE m.name = '" +
       CrmConstants.MODULE_NAME + "' AND s.module = m AND " +
-      "s.name IN ?1 AND e.status = s AND e.userName = ?2 ORDER BY e.dbEntity.name")
-  Iterable<EntityEx> findUserContacts(List<String> statuses, String userName);
+      "s.name IN ?1 AND e.status = s AND e.user = u AND u.name = ?2 ORDER BY e.dbEntity.name")
+  Iterable<EntityEx> findUserLeads(List<String> statuses, String userName);
 
-  @Query("SELECT e FROM EntityEx e, Status s, Module m WHERE m.name = '" +
+  @Query("SELECT e FROM EntityEx e, Status s, Module m, User u WHERE m.name = '" +
       CrmConstants.MODULE_NAME + "' AND s.module = m AND " +
-      "s.name NOT IN ?1 AND e.status = s AND e.userName = ?2 ORDER BY e.dbEntity.name")
-  Iterable<EntityEx> findUserClients(List<String> statuses, String userName);
+      "s.name NOT IN ?1 AND e.status = s AND e.user = u AND u.name = ?2 ORDER BY e.dbEntity.name")
+  Iterable<EntityEx> findUserCustomers(List<String> statuses, String userName);
 }

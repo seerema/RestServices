@@ -13,9 +13,11 @@
 package com.seerema.catalog.srv.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
+import com.seerema.base.WsSrvException;
 import com.seerema.catalog.srv.dto.RegionDto;
 import com.seerema.catalog.srv.jpa.model.Region;
 import com.seerema.catalog.srv.jpa.repo.RegionRepo;
@@ -38,8 +40,12 @@ public class RegionServiceImpl
   }
 
   @Override
-  protected Iterable<Region> findAll() {
-    return _repo.findAllByOrderByNameAsc();
+  protected Iterable<Region> findAll() throws WsSrvException {
+    try {
+      return _repo.findAllByOrderByNameAsc();
+    } catch (DataAccessException e) {
+      throw throwError(ErrorCodes.ERROR_FIND_ALL_REGIONS.name(), e);
+    }
   }
 
   @Override

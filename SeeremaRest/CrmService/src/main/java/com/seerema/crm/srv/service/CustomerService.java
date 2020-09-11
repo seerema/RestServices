@@ -18,10 +18,10 @@ import com.seerema.shared.jpa.status.model.EntityEx;
 import com.seerema.shared.jpa.status.service.EntityStatusService;
 import com.seerema.shared.rest.response.DataGoodResponse;
 
-public interface ContactService
+public interface CustomerService
     extends EntityStatusService<EntityEx, EntityExDto> {
 
-  DataGoodResponse findUserContacts(String username) throws WsSrvException;
+  DataGoodResponse findUserLeads(String username) throws WsSrvException;
 
-  DataGoodResponse findUserClients(String username) throws WsSrvException;
+  DataGoodResponse findUserCustomers(String username) throws WsSrvException;
 }

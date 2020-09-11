@@ -36,6 +36,14 @@ public class Status extends AbstractEntityModule implements Serializable {
 
   private String name;
 
+  public Status() {
+  }
+
+  public Status(Integer id, String name) {
+    setId(id);
+    this.name = name;
+  }
+
   public String getIsSystem() {
     return this.isSystem;
   }
