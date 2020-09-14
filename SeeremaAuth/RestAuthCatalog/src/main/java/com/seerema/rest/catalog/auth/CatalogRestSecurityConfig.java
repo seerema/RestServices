@@ -70,6 +70,9 @@ public class CatalogRestSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.DELETE, "/" +
             CatalogConstants.MODULE_NAME +"/field/{\\d+}").
             hasAnyRole("SBS_MANAGER","SBS_ADMIN")
+        .antMatchers(HttpMethod.DELETE, "/" +
+            CatalogConstants.MODULE_NAME +"/comm_media/{\\d+}").
+            hasAnyRole("SBS_MANAGER","SBS_ADMIN")
             
         /************* LAST DENIED RULE *************/
         .anyRequest().authenticated();

@@ -22,15 +22,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-import com.seerema.shared.jpa.base.model.AbstractEntity;
-import com.seerema.shared.jpa.base.model.User;
+import com.seerema.shared.jpa.base.model.AbstractEntityUser;
 
 /**
  * The persistent class for the entity_status_history database table.
  */
 
 @MappedSuperclass
-public class AbstractEntityHistory extends AbstractEntity
+public class AbstractEntityHistory extends AbstractEntityUser
     implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -38,14 +37,9 @@ public class AbstractEntityHistory extends AbstractEntity
   private Timestamp created;
 
   // uni-directional many-to-one association to Entity
-  @ManyToOne
+  @ManyToOne(optional = false)
   @JoinColumn(name = "entity_id")
   private EntityEx entity;
-
-  // uni-directional many-to-one association to User
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "user_id")
-  private User user;
 
   public AbstractEntityHistory() {
   }
@@ -71,11 +65,4 @@ public class AbstractEntityHistory extends AbstractEntity
     this.entity = entity;
   }
 
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
 }

@@ -12,23 +12,21 @@
 
 package com.seerema.shared.jpa.status.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.seerema.shared.jpa.base.model.BaseEntityUser;
+import com.seerema.shared.jpa.base.model.BaseEntity;
 import com.seerema.shared.jpa.base.model.DbEntity;
 import com.seerema.shared.jpa.base.model.EntityField;
 import com.seerema.shared.jpa.base.model.FieldCategory;
@@ -38,19 +36,16 @@ import com.seerema.shared.jpa.base.model.User;
  * The persistent class for the entity_ex database table.
  */
 
-@Entity
-@Table(name = "entity_ex")
-public class EntityEx implements BaseEntityUser, Serializable {
-
-  private static final long serialVersionUID = 1L;
+@MappedSuperclass
+public class BaseEntityEx implements BaseEntity {
 
   @Id
   private Integer id;
 
-  public EntityEx() {
+  public BaseEntityEx() {
   }
 
-  public EntityEx(int id) {
+  public BaseEntityEx(int id) {
     setId(id);
   }
 

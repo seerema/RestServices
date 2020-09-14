@@ -16,22 +16,19 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.seerema.shared.jpa.base.model.FieldCategory;
+import com.seerema.shared.jpa.base.model.CommMedia;
 import com.seerema.srv.shared.annotations.DtoFor;
 import com.seerema.srv.shared.annotations.ModelItem;
 
-/**
- * FieldCategory DTO
- */
-@DtoFor(FieldCategory.class)
-public class FieldCategoryDto extends AbstractEntityDto {
+@DtoFor(CommMedia.class)
+public class CommMediaDto extends AbstractEntityDto {
 
   @NotEmpty
   @ModelItem
-  @Size(max = 50)
+  @Size(max = 25)
   private String name;
 
-  @ModelItem(getter = false)
+  @ModelItem
   @JsonIgnore
   @Size(max = 1)
   private String isSystem;

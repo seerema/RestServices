@@ -24,9 +24,11 @@ import org.springframework.security.web.authentication.Http403ForbiddenEntryPoin
 public abstract class AbstractRestSecurityConfig
     extends WebSecurityConfigurerAdapter {
 
+  protected abstract String getModuleName();
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable()
+    HttpSecurity sconfig = http.csrf().disable()
 
     // @@formatter:off
     
@@ -63,14 +65,22 @@ public abstract class AbstractRestSecurityConfig
         // All private api
         .antMatchers(HttpMethod.GET,
             "/" + getModuleName() + "/private/**").
-            hasAnyRole("SBS_MANAGER", "SBS_ADMIN")
-            
+            hasAnyRole("SBS_MANAGER", "SBS_ADMIN").and();
+        
+        /************* CUSTOM API *************/
+    
+        addCustSecurityConfig(sconfig);
+    
         /************* LAST DENIED RULE *************/
 
-        .anyRequest().authenticated();
+        sconfig.authorizeRequests().anyRequest().authenticated();
+    
+    
     
     // @formatter:on
   }
 
-  protected abstract String getModuleName();
+  protected void addCustSecurityConfig(HttpSecurity sconfig) throws Exception {
+    // Do nothing by default;
+  }
 }

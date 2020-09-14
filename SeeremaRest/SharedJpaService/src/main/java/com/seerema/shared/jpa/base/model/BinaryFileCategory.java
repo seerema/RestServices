@@ -15,7 +15,6 @@ package com.seerema.shared.jpa.base.model;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,36 +25,15 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "bfile_category")
-public class BinaryFileCategory extends AbstractEntity implements Serializable {
+public class BinaryFileCategory extends AbstractEntitySysName
+    implements Serializable {
   private static final long serialVersionUID = 1L;
-
-  @Column(unique = true)
-  private String name;
-
-  @Column(name = "is_system")
-  private String isSystem;
 
   //bi-directional many-to-one association to BinaryFile
   @OneToMany(mappedBy = "bfileCategory")
   private List<BinaryFile> binaryFiles;
 
   public BinaryFileCategory() {
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getIsSystem() {
-    return isSystem;
-  }
-
-  public void setIsSystem(String isSystem) {
-    this.isSystem = isSystem;
   }
 
   public List<BinaryFile> getBinaryFiles() {

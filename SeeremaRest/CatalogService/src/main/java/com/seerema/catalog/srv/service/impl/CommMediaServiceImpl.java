@@ -18,63 +18,63 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import com.seerema.base.WsSrvException;
-import com.seerema.catalog.srv.dto.AddressDto;
-import com.seerema.catalog.srv.jpa.model.Address;
-import com.seerema.catalog.srv.jpa.repo.AddressRepo;
+import com.seerema.catalog.srv.jpa.repo.CommMediaRepo;
 import com.seerema.catalog.srv.shared.ErrorCodes;
+import com.seerema.shared.dto.CommMediaDto;
+import com.seerema.shared.jpa.base.model.CommMedia;
 import com.seerema.shared.jpa.base.service.impl.AbstractEntityServiceImpl;
 
 /**
- * Implementation for Address Service
+ * Implementation for CommMedia Service
  */
 @Service
-public class AddressServiceImpl
-    extends AbstractEntityServiceImpl<Address, AddressDto> {
+public class CommMediaServiceImpl
+    extends AbstractEntityServiceImpl<CommMedia, CommMediaDto> {
 
   @Autowired
-  private AddressRepo _repo;
+  private CommMediaRepo _repo;
 
   @Override
-  protected CrudRepository<Address, Integer> getEntityRepo() {
+  protected CrudRepository<CommMedia, Integer> getEntityRepo() {
     return _repo;
   }
 
   @Override
-  protected Iterable<Address> findAll() throws WsSrvException {
+  protected Iterable<CommMedia> findAll() throws WsSrvException {
     try {
-      return _repo.findAllByOrderByLine1Asc();
+      return _repo.findAllByOrderByNameAsc();
     } catch (DataAccessException e) {
-      throw throwError(ErrorCodes.ERROR_FIND_ALL_ADDRESSES.name(), e);
+      throw throwError(ErrorCodes.ERROR_FIND_ALL_COMM_MEDIAS.name(), e);
     }
   }
 
   @Override
-  protected Class<AddressDto> getEntityDtoClass() {
-    return AddressDto.class;
+  protected Class<CommMediaDto> getEntityDtoClass() {
+    return CommMediaDto.class;
   }
 
   @Override
   protected String getEntityCreateErrorCode() {
-    return ErrorCodes.ERROR_CREATE_ADDRESS.name();
+    return ErrorCodes.ERROR_CREATE_COMM_MEDIA.name();
   }
 
   @Override
   protected String getEntityReadErrorCode() {
-    return ErrorCodes.ERROR_READ_ADDRESS.name();
+    return ErrorCodes.ERROR_READ_COMM_MEDIA.name();
   }
 
   @Override
   protected String getEntitiesReadErrorCode() {
-    return ErrorCodes.ERROR_READ_ADDRESSES.name();
+    return ErrorCodes.ERROR_READ_COMM_MEDIAS.name();
   }
 
   @Override
   protected String getEntityUpdateErrorCode() {
-    return ErrorCodes.ERROR_UPDATE_ADDRESS.name();
+    return ErrorCodes.ERROR_UPDATE_COMM_MEDIA.name();
   }
 
   @Override
   protected String getEntityDeleteErrorCode() {
-    return ErrorCodes.ERROR_DELETE_ADDRESS.name();
+    return ErrorCodes.ERROR_DELETE_COMM_MEDIA.name();
   }
 }

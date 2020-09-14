@@ -12,6 +12,7 @@
 
 package com.seerema.shared.jpa.base.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,8 +97,7 @@ public abstract class AbstractEntityServiceImpl<T1 extends BaseEntity, T2 extend
         entityMapper.map(readRawEntity(id), getEntityDtoClass()));
   }
 
-  @Override
-  public DataGoodResponse readEntities() throws WsSrvException {
+  protected List<T2> readMappedEntities() throws WsSrvException {
     Iterable<T1> entities;
 
     try {
@@ -106,8 +106,12 @@ public abstract class AbstractEntityServiceImpl<T1 extends BaseEntity, T2 extend
       throw throwError(getEntityReadErrorCode(), e);
     }
 
-    return new DataGoodResponse(
-        entityMapper.map(entities, getEntityDtoClass()));
+    return entityMapper.map(entities, getEntityDtoClass());
+  }
+
+  @Override
+  public DataGoodResponse readEntities() throws WsSrvException {
+    return new DataGoodResponse(readMappedEntities());
   }
 
   @Override

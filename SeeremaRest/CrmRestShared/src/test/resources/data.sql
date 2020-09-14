@@ -1,6 +1,11 @@
 insert into module(id, name) values(2, 'crm');
 insert into user(name) values('anonymous');
 
+insert into comm_media(name, is_system) values('LL_EMAIL', 'Y');
+insert into comm_media(name, is_system) values('LL_PHONE_CALL', 'Y');
+insert into comm_media(name, is_system) values('LL_SMS', 'Y');
+insert into comm_media(name, is_system) values('LL_VIDEO_CHAT', 'Y');
+
 insert into status(name, module_id, is_system) values('LL_LEAD', 2, 'Y');
 insert into status(name, module_id, is_system) values('LL_CUSTOMER', 2, 'Y');
 insert into status(name, module_id, is_system) values('LL_INACTIVE', 2, 'Y');
@@ -35,3 +40,5 @@ insert into entity_ex(id, entity_id, status_id, user_id) values(1, 1, 1, 1);
 insert into entity_field(entity_id, field_id, value) values(1, 1, 'http://www.example.com/');
 insert into entity_status_history (status_id, entity_id, user_id, created) values(1, 1, 1, current_timestamp);
 insert into entity_user_history(entity_id, owner_id, user_id, created) values(1, 1, 1, current_timestamp);
+insert into cust_comm_history(entity_id, body, user_id, comm_media_id, created) values(1, 'Test Body', 1, 1, current_timestamp);
+

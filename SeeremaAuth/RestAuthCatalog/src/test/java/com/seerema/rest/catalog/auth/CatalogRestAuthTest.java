@@ -29,6 +29,7 @@ import com.seerema.catalog.srv.dto.RegionDto;
 import com.seerema.catalog.srv.shared.CatalogConstants;
 import com.seerema.rest.auth.base.SharedRestTestUnits;
 import com.seerema.rest.shared.base.utils.CommonWebTestUtils;
+import com.seerema.shared.dto.CommMediaDto;
 import com.seerema.shared.dto.EntityDto;
 import com.seerema.shared.dto.EntityFieldDto;
 import com.seerema.shared.dto.FieldCategoryDto;
@@ -168,9 +169,17 @@ public class CatalogRestAuthTest extends SharedRestTestUnits {
             "\"field_cat\":{\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false}}");
     company.setId(1);
 
+    // Create comm_media
+    CommMediaDto cm = new CommMediaDto();
+    cm.setName("zz");
+    checkEntity(
+        new RequestEntity<CommMediaDto>(cm, headers, HttpMethod.PUT,
+            new URI(BASE_URL + "/comm_media")),
+        "comm_media", "{\"id\":1,\"name\":\"zz\",\"read_only\":false}");
+
     // Drop all entities in reverse order
     for (String name : new String[] { "entity", "address", "city", "region",
-        "country" })
+        "country", "comm_media" })
       dropEntity(name);
   }
 

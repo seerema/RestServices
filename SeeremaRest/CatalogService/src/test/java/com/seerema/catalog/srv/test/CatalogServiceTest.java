@@ -35,10 +35,12 @@ import com.seerema.catalog.srv.dto.CityDto;
 import com.seerema.catalog.srv.dto.CountryDto;
 import com.seerema.catalog.srv.dto.RegionDto;
 import com.seerema.catalog.srv.shared.ErrorCodes;
+import com.seerema.shared.dto.CommMediaDto;
 import com.seerema.shared.dto.EntityDto;
 import com.seerema.shared.dto.EntityFieldDto;
 import com.seerema.shared.dto.FieldCategoryDto;
 import com.seerema.shared.dto.FieldDto;
+import com.seerema.shared.jpa.base.model.CommMedia;
 import com.seerema.shared.jpa.base.model.Field;
 import com.seerema.shared.jpa.base.model.FieldCategory;
 import com.seerema.shared.jpa.base.service.BaseEntityService;
@@ -58,6 +60,9 @@ public class CatalogServiceTest extends SharedCatalogServiceTestUnits {
 
   @Autowired
   private BaseEntityService<Field, FieldDto> fieldSrv;
+
+  @Autowired
+  private BaseEntityService<CommMedia, CommMediaDto> commMediaSrv;
 
   private boolean initialized;
 
@@ -80,71 +85,38 @@ public class CatalogServiceTest extends SharedCatalogServiceTestUnits {
 
     testCitySrv();
 
-    // Read address
-    AddressDto address = SharedJpaTestUtils.checkNonEmptyGoodResponse(
-        getAddressSrv().readEntity(1), 1, AddressDto.class);
-    assertEquals("Here we are", address.getLine1(),
-        "Address line 1 not found.");
-    assertEquals("ABC123", address.getZip(), "Zip not found.");
+    AddressDto address = testAddress();
 
-    // Try Save it back
-    try {
-      address.setId(null);
-      getAddressSrv().createEntity(address);
-      fail("WsSrvException expected");
-    } catch (WsSrvException e) {
-      assertEquals(ErrorCodes.ERROR_CREATE_ADDRESS.name() +
-          " - Exception type org.springframework.dao.DataIntegrityViolationException" +
-          " [could not execute statement; SQL [n/a]; constraint [UKSOJEAX63P91GBQA7B803DXSR0];" +
-          " nested exception is org.hibernate.exception.ConstraintViolationException:" +
-          " could not execute statement]", e.getMessage());
-    }
+    testFieldCategory();
 
-    // Read FieldCategory
-    FieldCategoryDto fc = SharedJpaTestUtils.checkNonEmptyGoodResponse(
-        fieldCatSrv.readEntity(1), 1, FieldCategoryDto.class);
-    assertEquals("LL_COMPANY", fc.getName(), "Field Category name not found.");
+    testField();
 
-    // Try Save it back
-    try {
-      fc.setId(null);
-      fieldCatSrv.createEntity(fc);
-      fail("WsSrvException expected");
-    } catch (WsSrvException e) {
-      assertEquals(
-          com.seerema.shared.jpa.base.shared.ErrorCodes.ERROR_CREATE_FIELD_CAT
-              .name() +
-              " - Exception type org.springframework.dao.DataIntegrityViolationException" +
-              " [could not execute statement; SQL [n/a]; constraint [UK13PPBLXLC5RAX5WC61PN5DV0C];" +
-              " nested exception is org.hibernate.exception.ConstraintViolationException:" +
-              " could not execute statement]",
-          e.getMessage());
-    }
+    testEntityField();
 
-    // Read Field
-    FieldDto field = SharedJpaTestUtils
-        .checkNonEmptyGoodResponse(fieldSrv.readEntity(1), 1, FieldDto.class);
-    assertEquals("LL_SITE", field.getName(), "Field Category name not found.");
+    testCompany();
 
-    // Try Save it back
-    try {
-      field.setId(null);
-      fieldSrv.createEntity(field);
-      fail("WsSrvException expected");
-    } catch (WsSrvException e) {
-      assertEquals("ERROR_CREATE_FIELD" +
-          " - Exception type org.springframework.dao.DataIntegrityViolationException" +
-          " [could not execute statement; SQL [n/a]; constraint [UKKA1MV1RBJ19YN9WE33OQ1BJM6];" +
-          " nested exception is org.hibernate.exception.ConstraintViolationException:" +
-          " could not execute statement]", e.getMessage());
-    }
+    // Test all chain
+    assertEquals("Canada", address.getCity().getRegion().getCountry().getName(),
+        "Canada  doesn't match.");
 
-    // Read BusinessInfo Field
+    testBusinessInfo();
+
+    testCommMedia();
+  }
+
+  private void testEntityField() throws WsSrvException {
+    // Read EntityField Field
     EntityFieldDto cfield = SharedJpaTestUtils.checkNonEmptyGoodResponse(
         getEntityFieldSrv().readEntity(1), 1, EntityFieldDto.class);
     assertEquals("http://www.example.com/", cfield.getValue(),
         "BusinessInfo Field value not found.");
 
+    // Saving back test skipped because it cannot be saved alone and
+    // must be saved together with entity
+
+  }
+
+  private void testCompany() throws WsSrvException {
     // Read company
     EntityDto company = SharedJpaTestUtils.checkNonEmptyGoodResponse(
         getEntitySrv().readEntity(1), 1, EntityDto.class);
@@ -175,12 +147,93 @@ public class CatalogServiceTest extends SharedCatalogServiceTestUnits {
           " nested exception is org.hibernate.exception.ConstraintViolationException:" +
           " could not execute statement]", e.getMessage());
     }
+  }
 
-    // Test all chain
-    assertEquals("Canada", address.getCity().getRegion().getCountry().getName(),
-        "Canada  doesn't match.");
+  private void testCommMedia() throws WsSrvException {
+    // Read CommMedia
+    CommMediaDto cm = SharedJpaTestUtils.checkNonEmptyGoodResponse(
+        commMediaSrv.readEntities(), 4, CommMediaDto.class);
+    assertEquals("LL_EMAIL", cm.getName(), "Field Category name not found.");
 
-    testBusinessInfo();
+    // Try Save it back
+    try {
+      cm.setId(null);
+      commMediaSrv.createEntity(cm);
+      fail("WsSrvException expected");
+    } catch (WsSrvException e) {
+      assertEquals("ERROR_CREATE_COMM_MEDIA" +
+          " - Exception type org.springframework.dao.DataIntegrityViolationException" +
+          " [could not execute statement; SQL [n/a]; constraint [UK_IRHW2RVS1BM77D2SNAEENE85L];" +
+          " nested exception is org.hibernate.exception.ConstraintViolationException:" +
+          " could not execute statement]", e.getMessage());
+    }
+  }
+
+  private void testField() throws WsSrvException {
+    // Read Field
+    FieldDto field = SharedJpaTestUtils
+        .checkNonEmptyGoodResponse(fieldSrv.readEntity(1), 1, FieldDto.class);
+    assertEquals("LL_SITE", field.getName(), "Field Category name not found.");
+
+    // Try Save it back
+    try {
+      field.setId(null);
+      fieldSrv.createEntity(field);
+      fail("WsSrvException expected");
+    } catch (WsSrvException e) {
+      assertEquals("ERROR_CREATE_FIELD" +
+          " - Exception type org.springframework.dao.DataIntegrityViolationException" +
+          " [could not execute statement; SQL [n/a]; constraint [UKKA1MV1RBJ19YN9WE33OQ1BJM6];" +
+          " nested exception is org.hibernate.exception.ConstraintViolationException:" +
+          " could not execute statement]", e.getMessage());
+    }
+  }
+
+  private void testFieldCategory() throws WsSrvException {
+    // Read FieldCategory
+    FieldCategoryDto fc = SharedJpaTestUtils.checkNonEmptyGoodResponse(
+        fieldCatSrv.readEntity(1), 1, FieldCategoryDto.class);
+    assertEquals("LL_COMPANY", fc.getName(), "Field Category name not found.");
+
+    // Try Save it back
+    try {
+      fc.setId(null);
+      fieldCatSrv.createEntity(fc);
+      fail("WsSrvException expected");
+    } catch (WsSrvException e) {
+      assertEquals(
+          com.seerema.shared.jpa.base.shared.ErrorCodes.ERROR_CREATE_FIELD_CAT
+              .name() +
+              " - Exception type org.springframework.dao.DataIntegrityViolationException" +
+              " [could not execute statement; SQL [n/a]; constraint [UK13PPBLXLC5RAX5WC61PN5DV0C];" +
+              " nested exception is org.hibernate.exception.ConstraintViolationException:" +
+              " could not execute statement]",
+          e.getMessage());
+    }
+  }
+
+  private AddressDto testAddress() throws WsSrvException {
+    // Read address
+    AddressDto address = SharedJpaTestUtils.checkNonEmptyGoodResponse(
+        getAddressSrv().readEntity(1), 1, AddressDto.class);
+    assertEquals("Here we are", address.getLine1(),
+        "Address line 1 not found.");
+    assertEquals("ABC123", address.getZip(), "Zip not found.");
+
+    // Try Save it back
+    try {
+      address.setId(null);
+      getAddressSrv().createEntity(address);
+      fail("WsSrvException expected");
+    } catch (WsSrvException e) {
+      assertEquals(ErrorCodes.ERROR_CREATE_ADDRESS.name() +
+          " - Exception type org.springframework.dao.DataIntegrityViolationException" +
+          " [could not execute statement; SQL [n/a]; constraint [UKSOJEAX63P91GBQA7B803DXSR0];" +
+          " nested exception is org.hibernate.exception.ConstraintViolationException:" +
+          " could not execute statement]", e.getMessage());
+    }
+
+    return address;
   }
 
   private void testBusinessInfo() throws WsSrvException, IOException {

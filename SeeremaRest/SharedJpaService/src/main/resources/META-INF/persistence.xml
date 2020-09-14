@@ -8,5 +8,6 @@
 		<class>com.seerema.shared.jpa.base.model.EntityField</class>
 		<class>com.seerema.shared.jpa.base.model.Field</class>
 		<class>com.seerema.shared.jpa.base.model.FieldCategory</class>
+		<class>com.seerema.shared.jpa.base.model.CommMedia</class>
 	</persistence-unit>
 </persistence>

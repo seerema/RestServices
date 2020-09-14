@@ -93,6 +93,11 @@ insert into field(name, field_category_id, is_system) values('LL_NOTES', 2, 'Y')
 insert into bfile_category (name, is_system) values('LL_GENERAL', 'Y');
 insert into bfile_category (name, is_system) values('LL_LOGO', 'Y');
 
+insert into comm_media(name, is_system) values('LL_EMAIL', 'Y');
+insert into comm_media(name, is_system) values('LL_PHONE_CALL', 'Y');
+insert into comm_media(name, is_system) values('LL_SMS', 'Y');
+insert into comm_media(name, is_system) values('LL_VIDEO_CHAT', 'Y');
+
 -- Custom data
 insert into address(line_1, zip, city_id) values('Here we are', 'ABC123', 1);
 

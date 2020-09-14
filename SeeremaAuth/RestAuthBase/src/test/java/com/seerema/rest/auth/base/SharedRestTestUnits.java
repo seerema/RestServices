@@ -116,8 +116,14 @@ public abstract class SharedRestTestUnits extends SpringSessionSecurityTest {
     }
 
     // Try Delete entity as user
-    RequestEntity<?> drequest = new RequestEntity<>(request.getHeaders(),
-        HttpMethod.DELETE, new URI(getBaseUrl() + "/" + name + "/" + id));
+    checkDeleteForbidden(getBaseUrl() + "/" + name + "/" + id,
+        request.getHeaders());
+  }
+
+  protected void checkDeleteForbidden(String url, HttpHeaders headers)
+      throws URISyntaxException {
+    RequestEntity<?> drequest =
+        new RequestEntity<>(headers, HttpMethod.DELETE, new URI(url));
     ResponseEntity<String> rdenied =
         getRestTemplate().exchange(drequest, String.class);
     assertEquals(HttpStatus.FORBIDDEN, rdenied.getStatusCode());
@@ -127,8 +133,13 @@ public abstract class SharedRestTestUnits extends SpringSessionSecurityTest {
     // Try Delete entity as manager
     prepMgrSecuritySession();
     HttpHeaders headers = prepHttpHeaders();
-    RequestEntity<?> drequest = new RequestEntity<>(headers, HttpMethod.DELETE,
-        new URI(getBaseUrl() + "/" + name + "/1"));
+    dropEntity(getBaseUrl() + "/" + name + "/1", headers);
+  }
+
+  protected void dropEntity(String url, HttpHeaders headers)
+      throws URISyntaxException {
+    RequestEntity<?> drequest =
+        new RequestEntity<>(headers, HttpMethod.DELETE, new URI(url));
     ResponseEntity<String> rok =
         getRestTemplate().exchange(drequest, String.class);
     assertEquals(HttpStatus.OK, rok.getStatusCode());

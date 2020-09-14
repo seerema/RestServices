@@ -71,8 +71,8 @@ public class SharedRestTestUtils {
 
   protected List<?> simpleDataResponseCheck(DataGoodResponse data, int size) {
 
-    assertNotNull(data, "List is empty");
-    assertTrue(data.getResult(), "Result is false");
+    assertNotNull(data, "Response data is NULL.");
+    assertTrue(data.getResult(), "Response failed.");
 
     List<?> list = data.getData();
     assertNotNull(list, "Empty data.");

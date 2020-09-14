@@ -30,6 +30,11 @@ insert into field(name, field_category_id, is_system) values('LL_EMAIL', 3, 'Y')
 insert into field(name, field_category_id, is_system) values('LL_SKYPE_ID', 3, 'Y');
 insert into field(name, field_category_id, is_system) values('LL_NOTES', 3, 'Y');
 
+insert into comm_media(name, is_system) values('LL_EMAIL', 'Y');
+insert into comm_media(name, is_system) values('LL_PHONE_CALL', 'Y');
+insert into comm_media(name, is_system) values('LL_SMS', 'Y');
+insert into comm_media(name, is_system) values('LL_VIDEO_CHAT', 'Y');
+
 -- Temp contact
 insert into entity(module_id, name, field_cat_id) values(2, 'Example', 1);
 insert into entity_ex(id, entity_id, status_id, user_id) values(1, 1, 1, 1);

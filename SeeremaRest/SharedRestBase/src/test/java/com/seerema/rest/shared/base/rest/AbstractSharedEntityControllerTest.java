@@ -97,23 +97,25 @@ public abstract class AbstractSharedEntityControllerTest<T>
     LinkedHashMap<?, ?> map = checkDataGooResponse(request, getEntityIdx());
     checkAfterCreate(entity);
 
-    // Try create same entity
-    ResponseEntity<String> resp = _rest.exchange(request, String.class);
-    assertEquals(HttpStatus.OK, resp.getStatusCode());
-    assertNotNull(resp.getBody());
+    if (isDupError()) {
+      // Try create same entity
+      ResponseEntity<String> resp = _rest.exchange(request, String.class);
+      assertEquals(HttpStatus.OK, resp.getStatusCode());
+      assertNotNull(resp.getBody());
 
-    Pattern p = Pattern.compile(
-        "\\{\"result\":false,\"error\":\\{" + "\"id\":\"" + "ERROR_CREATE_" +
-            getEntityUrl().toUpperCase() + "\"," + "\"info\":\"Exception type" +
-            " org.springframework.dao.DataIntegrityViolationException\"," +
-            "\"request_id\":\\d*\\}\\}");
+      Pattern p = Pattern.compile("\\{\"result\":false,\"error\":\\{" +
+          "\"id\":\"" + "ERROR_CREATE_" + getEntityUrl().toUpperCase() + "\"," +
+          "\"info\":\"Exception type" +
+          " org.springframework.dao.DataIntegrityViolationException\"," +
+          "\"request_id\":\\d*\\}\\}");
 
-    if (!p.matcher(resp.getBody()).matches()) {
-      System.out.println(
-          p.toString().replaceAll("\\\\\\{", "{").replaceAll("\\\\\\[", "[")
-              .replaceAll("\\\\\\]", "]").replaceAll("\\\\\\}", "}"));
-      System.out.println(resp.getBody());
-      fail("Duplicate Entity create error doesn't match.");
+      if (!p.matcher(resp.getBody()).matches()) {
+        System.out.println(
+            p.toString().replaceAll("\\\\\\{", "{").replaceAll("\\\\\\[", "[")
+                .replaceAll("\\\\\\]", "]").replaceAll("\\\\\\}", "}"));
+        System.out.println(resp.getBody());
+        fail("Duplicate Entity create error doesn't match.");
+      }
     }
 
     // Update entity
@@ -133,6 +135,11 @@ public abstract class AbstractSharedEntityControllerTest<T>
 
     // Delete entry
     checkDelete(getBaseTestUrl() + getEntityUrl() + "/" + getEntityIdx());
+  }
+
+  protected boolean isDupError() {
+    // By default duplicated records are not allowed
+    return true;
   }
 
   protected void updateEntity(T entity, LinkedHashMap<?, ?> map) {

@@ -49,7 +49,6 @@ import com.seerema.shared.jpa.base.service.EntityService;
 import com.seerema.shared.jpa.status.model.EntityEx;
 import com.seerema.shared.jpa.status.service.EntityStatusService;
 import com.seerema.shared.jpa.status.service.StatusService;
-import com.seerema.shared.jpa.status.shared.ErrorCodes;
 import com.seerema.shared.jpa.status.utils.SharedJpaTestUtils;
 import com.seerema.shared.rest.response.DataGoodResponse;
 
@@ -236,7 +235,10 @@ public abstract class AbstractEntityStatusServiceTest {
       updateEntityUser(dto1, false);
       fail("USER_ACCESS_DENIED Exception expected");
     } catch (WsSrvException e) {
-      assertEquals(ErrorCodes.USER_ACCESS_DENIED.name(), e.getErrorCode());
+      assertEquals(
+          com.seerema.shared.jpa.base.shared.ErrorCodes.USER_ACCESS_DENIED
+              .name(),
+          e.getErrorCode());
     }
 
     // Update entity with different user but manager role

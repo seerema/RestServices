@@ -12,15 +12,22 @@
 
 package com.seerema.crm.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.seerema.base.WsSrvException;
+import com.seerema.crm.srv.dto.CustCommHistoryDto;
+import com.seerema.crm.srv.dto.CustomerDto;
 import com.seerema.crm.srv.jpa.repo.CustomerRepo;
+import com.seerema.crm.srv.service.CustCommHistoryService;
 import com.seerema.crm.srv.service.CustomerService;
 import com.seerema.crm.srv.shared.CrmConstants;
 import com.seerema.crm.srv.shared.ErrorCodes;
+import com.seerema.shared.dto.EntityExDto;
 import com.seerema.shared.jpa.status.model.EntityEx;
 import com.seerema.shared.jpa.status.service.impl.AbstractEntityStatusServiceImpl;
 import com.seerema.shared.rest.response.DataGoodResponse;
@@ -35,36 +42,37 @@ public class CustomerServiceImpl extends AbstractEntityStatusServiceImpl
   @Autowired
   private CustomerRepo _repo;
 
+  @Autowired
+  private CustCommHistoryService _hsrv;
+
   @Override
-  public DataGoodResponse findUserLeads(String username)
-      throws WsSrvException {
-    Iterable<EntityEx> quests;
+  public DataGoodResponse findUserLeads(String username) throws WsSrvException {
+    Iterable<EntityEx> list;
 
     try {
-      quests =
-          _repo.findUserLeads(CrmConstants.CRM_CONTACT_STATUSES, username);
+      list = _repo.findUserLeads(CrmConstants.CRM_CONTACT_STATUSES, username);
     } catch (DataAccessException e) {
       throw throwError(ErrorCodes.ERROR_READ_USER_CONTACTS.name(), e);
     }
 
     return new DataGoodResponse(
-        getEntityMapper().map(quests, getEntityDtoClass()));
+        attachCommHistory(getEntityMapper().map(list, getEntityDtoClass())));
   }
 
   @Override
   public DataGoodResponse findUserCustomers(String username)
       throws WsSrvException {
-    Iterable<EntityEx> quests;
+    Iterable<EntityEx> list;
 
     try {
-      quests =
+      list =
           _repo.findUserCustomers(CrmConstants.CRM_CONTACT_STATUSES, username);
     } catch (DataAccessException e) {
       throw throwError(ErrorCodes.ERROR_READ_USER_CLIENTS.name(), e);
     }
 
     return new DataGoodResponse(
-        getEntityMapper().map(quests, getEntityDtoClass()));
+        attachCommHistory(getEntityMapper().map(list, getEntityDtoClass())));
   }
 
   @Override
@@ -72,4 +80,39 @@ public class CustomerServiceImpl extends AbstractEntityStatusServiceImpl
     return CrmConstants.CRM_NEW_STATUS;
   }
 
+  @Override
+  public List<EntityExDto> readMappedEntities() throws WsSrvException {
+    return attachCommHistory(super.readMappedEntities());
+  }
+
+  @Override
+  protected List<EntityExDto> readMappedEntities(String username)
+      throws WsSrvException {
+    return attachCommHistory(super.readMappedEntities(username));
+  }
+
+  private List<EntityExDto> attachCommHistory(List<EntityExDto> list)
+      throws WsSrvException {
+    // Quick check
+    if (list == null)
+      return null;
+
+    List<EntityExDto> result = new ArrayList<>();
+
+    for (EntityExDto dto : list) {
+      CustomerDto cdto = new CustomerDto(dto);
+      result.add(cdto);
+
+      // Retrieve communication list (if any)
+      List<CustCommHistoryDto> hlist =
+          _hsrv.readMappedCustCommHistories(dto.getId());
+
+      if (hlist == null)
+        continue;
+
+      cdto.setCustCommHistories(hlist);
+    }
+
+    return result;
+  }
 }

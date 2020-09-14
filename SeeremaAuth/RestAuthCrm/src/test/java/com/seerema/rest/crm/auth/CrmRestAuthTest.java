@@ -12,6 +12,11 @@
 
 package com.seerema.rest.crm.auth;
 
+import java.net.URISyntaxException;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
+
 import com.seerema.crm.srv.shared.CrmConstants;
 import com.seerema.rest.auth.base.SharedModRestAuthTest;
 import com.seerema.rest.auth.base.SharedRestConstants;
@@ -74,6 +79,15 @@ public class CrmRestAuthTest extends SharedModRestAuthTest {
         "\"user\":\\{\"id\":1,\"name\":\"foo\"}," +
         "\"owner\":\\{\"id\":1,\"name\":\"foo\"}," +
         SharedRestConstants.CREATED_FIELD_PATTERN + "\\}\\]" +
-        ",\"user\":\\{\"id\":1,\"name\":\"foo\"\\}\\}\\]\\}$";
+        ",\"user\":\\{\"id\":1,\"name\":\"foo\"\\},\"cust_comm_histories\":\\[\\]\\}\\]\\}$";
+  }
+
+  @Test
+  void testCustCommMediaApi() throws URISyntaxException {
+    // Test deletion only
+    prepUserSecuritySession();
+    HttpHeaders headers = prepHttpHeaders();
+
+    checkDeleteForbidden("/crm/cust_comm_history/1", headers);
   }
 }

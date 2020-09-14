@@ -33,12 +33,6 @@ import com.seerema.shared.dto.FieldDto;
 
 /**
  * Integration test for REST Auth service
- *
- * @param <EntityDto> EntityDto
- * @param <EntityFieldDto> EntityFieldDto
- * @param <StatusDto> EntityStatusDto
- * @param <FieldCategoryDto> FieldCategoryDto
- * @param <FieldDto> FieldDto
  */
 public abstract class SharedModRestAuthTest extends SharedRestTestUnits {
 
@@ -84,11 +78,11 @@ public abstract class SharedModRestAuthTest extends SharedRestTestUnits {
         getEntityJson());
     entity.setId(1);
 
-    // Read all user's task
+    // Read all entities
     String task = getAllEntities();
     checkGetRequestOk(headers, task, getBaseUrl() + "/entities");
 
-    // Read all manager's tasks
+    // Read all manager's entities
     prepMgrSecuritySession();
     headers = prepHttpHeaders();
     checkGetRequestOk(headers, task, getBaseUrl() + "/private/entities");
