@@ -41,7 +41,8 @@ public abstract class SharedModRestAuthTest extends SharedRestTestUnits {
 
   @Test
   public void testEntity() throws Exception {
-    prepUserSecuritySession(10000);
+    // Protected entities required admin access
+    prepAdminSecuritySession(10);
     HttpHeaders headers = prepHttpHeaders();
 
     // Create Field Category
@@ -49,19 +50,23 @@ public abstract class SharedModRestAuthTest extends SharedRestTestUnits {
     fcat.setName("LL_TEST");
     checkEntity(
         new RequestEntity<FieldCategoryDto>(fcat, headers, HttpMethod.PUT,
-            new URI(getBaseUrl() + "/field_cat")),
+            new URI(getBaseUrl() + "/admin/field_cat")),
         "field_cat", getFieldCategoryJson());
     fcat.setId(1);
 
     // Create Field
     FieldDto field = new FieldDto();
     field.setName("Item");
-    field.setFieldCategory(fcat);
+    field.setFieldCat(fcat);
     checkEntity(new RequestEntity<FieldDto>(field, headers, HttpMethod.PUT,
-        new URI(getBaseUrl() + "/field")), "field", getFieldJson());
+        new URI(getBaseUrl() + "/admin/field")), "field", getFieldJson());
     field.setId(1);
 
-    // Create Quest with QuestField and status
+    // Switch to user's access
+    prepUserSecuritySession(10000);
+    headers = prepHttpHeaders();
+
+    // Create Entity with EntityField and status
     EntityFieldDto cfield = new EntityFieldDto();
     cfield.setValue("Test");
     cfield.setField(field);
@@ -102,5 +107,11 @@ public abstract class SharedModRestAuthTest extends SharedRestTestUnits {
   @Override
   protected String[] getAuthUrls() {
     return API_LIST;
+  }
+
+  @Override
+  protected String getApiPrefix(String api) {
+    return api.equals("field") || api.equals("field_cat") ? "/admin"
+        : super.getApiPrefix(api);
   }
 }

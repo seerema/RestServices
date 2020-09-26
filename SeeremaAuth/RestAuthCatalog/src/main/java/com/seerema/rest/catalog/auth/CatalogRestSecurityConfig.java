@@ -15,19 +15,18 @@ package com.seerema.rest.catalog.auth;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 
 import com.seerema.catalog.srv.shared.CatalogConstants;
+import com.seerema.rest.auth.base.AbstractRestSecurityConfig;
 
 /**
  * Security configuration fBase REST services
  * 
  */
 @EnableWebSecurity
-public class CatalogRestSecurityConfig extends WebSecurityConfigurerAdapter {
+public class CatalogRestSecurityConfig extends AbstractRestSecurityConfig {
 
-  @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable()
 
@@ -78,5 +77,44 @@ public class CatalogRestSecurityConfig extends WebSecurityConfigurerAdapter {
         .anyRequest().authenticated();
     
     // @formatter:on
+  }
+
+  @Override
+  protected void addCustSecurityConfig(HttpSecurity sconfig) throws Exception {
+    // @formatter:off
+    
+    sconfig.authorizeRequests()
+    
+    /************* CATALOG API *************/
+    
+    // Restrict any catalog delete
+    .antMatchers(HttpMethod.DELETE, "/" +
+        CatalogConstants.MODULE_NAME +"/country/{\\d+}").
+        hasAnyRole("SBS_MANAGER","SBS_ADMIN")
+    .antMatchers(HttpMethod.DELETE, "/" +
+        CatalogConstants.MODULE_NAME +"/region/{\\d+}").
+        hasAnyRole("SBS_MANAGER","SBS_ADMIN")
+    .antMatchers(HttpMethod.DELETE, "/" +
+        CatalogConstants.MODULE_NAME +"/city/{\\d+}").
+        hasAnyRole("SBS_MANAGER","SBS_ADMIN")
+    .antMatchers(HttpMethod.DELETE, "/" +
+        CatalogConstants.MODULE_NAME +"/address/{\\d+}").
+        hasAnyRole("SBS_MANAGER","SBS_ADMIN")
+    .antMatchers(HttpMethod.DELETE, "/" +
+        CatalogConstants.MODULE_NAME +"/bfile_cat/{\\d+}").
+        hasAnyRole("SBS_MANAGER","SBS_ADMIN")
+    .antMatchers(HttpMethod.DELETE, "/" +
+        CatalogConstants.MODULE_NAME +"/bfile/{\\d+}").
+        hasAnyRole("SBS_MANAGER","SBS_ADMIN")
+    .antMatchers(HttpMethod.DELETE, "/" +
+        CatalogConstants.MODULE_NAME +"/comm_media/{\\d+}").
+        hasAnyRole("SBS_MANAGER","SBS_ADMIN");
+    
+    // @formatter:on
+  }
+
+  @Override
+  protected String getModuleName() {
+    return CatalogConstants.MODULE_NAME;
   }
 }

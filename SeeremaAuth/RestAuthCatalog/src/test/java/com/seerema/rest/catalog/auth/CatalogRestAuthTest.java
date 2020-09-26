@@ -28,7 +28,7 @@ import com.seerema.catalog.srv.dto.CountryDto;
 import com.seerema.catalog.srv.dto.RegionDto;
 import com.seerema.catalog.srv.shared.CatalogConstants;
 import com.seerema.rest.auth.base.SharedRestTestUnits;
-import com.seerema.rest.shared.base.utils.CommonWebTestUtils;
+import com.seerema.shared.common.SharedTestUtils;
 import com.seerema.shared.dto.CommMediaDto;
 import com.seerema.shared.dto.EntityDto;
 import com.seerema.shared.dto.EntityFieldDto;
@@ -51,7 +51,7 @@ public class CatalogRestAuthTest extends SharedRestTestUnits {
 
   @Test
   public void testAuthAccessOK() throws IOException {
-    checkAuthUrlAccessOk("/", CommonWebTestUtils.readAppVersion());
+    checkAuthUrlAccessOk("/", SharedTestUtils.readAppVersion());
     checkAuthUrlAccessOk("/cfg?lst=lang", "{\"lang\":\"en\"}");
   }
 
@@ -129,20 +129,20 @@ public class CatalogRestAuthTest extends SharedRestTestUnits {
     fcat.setName("LL_TEST");
     checkEntity(
         new RequestEntity<FieldCategoryDto>(fcat, headers, HttpMethod.PUT,
-            new URI(BASE_URL + "/field_cat")),
+            new URI(BASE_URL + "/admin/field_cat")),
         "field_cat", "{\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false}");
     fcat.setId(1);
 
     // Create Field
     FieldDto field = new FieldDto();
     field.setName("Item");
-    field.setFieldCategory(fcat);
+    field.setFieldCat(fcat);
     checkEntity(
         new RequestEntity<FieldDto>(
-            field, headers, HttpMethod.PUT, new URI(BASE_URL + "/field")),
+            field, headers, HttpMethod.PUT, new URI(BASE_URL + "/admin/field")),
         "field",
         "{\"id\":1," +
-            "\"name\":\"Item\",\"field_category\":{\"id\":1,\"name\":\"LL_TEST\"," +
+            "\"name\":\"Item\",\"field_cat\":{\"id\":1,\"name\":\"LL_TEST\"," +
             "\"read_only\":false},\"read_only\":false}");
     field.setId(1);
 
@@ -163,7 +163,7 @@ public class CatalogRestAuthTest extends SharedRestTestUnits {
             company, headers, HttpMethod.PUT, new URI(BASE_URL + "/entity")),
         "entity",
         "{\"id\":1,\"name\":\"Test\",\"entity_fields\":[{\"id\":1,\"field\":{" +
-            "\"id\":1,\"name\":\"Item\",\"field_category\":{" +
+            "\"id\":1,\"name\":\"Item\",\"field_cat\":{" +
             "\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false}," +
             "\"read_only\":false},\"value\":\"Test\"}]," +
             "\"field_cat\":{\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false}}");

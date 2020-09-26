@@ -28,7 +28,7 @@ public class FieldControllerTest
     fcat.setId(1);
 
     entity.setName("Test");
-    entity.setFieldCategory(fcat);
+    entity.setFieldCat(fcat);
   }
 
   @Override
@@ -75,5 +75,10 @@ public class FieldControllerTest
   @Override
   protected FieldDto getEntity() {
     return new FieldDto();
+  }
+
+  @Override
+  protected String getApiPrefix() {
+    return "admin/";
   }
 }

@@ -34,7 +34,7 @@ public class FieldDto extends AbstractEntityDto {
 
   @NotNull
   @ModelItem
-  private FieldCategoryDto fieldCategory;
+  private FieldCategoryDto fieldCat;
 
   @ModelItem
   @JsonIgnore
@@ -49,12 +49,12 @@ public class FieldDto extends AbstractEntityDto {
     this.name = name;
   }
 
-  public FieldCategoryDto getFieldCategory() {
-    return fieldCategory;
+  public FieldCategoryDto getFieldCat() {
+    return fieldCat;
   }
 
-  public void setFieldCategory(FieldCategoryDto fieldCategory) {
-    this.fieldCategory = fieldCategory;
+  public void setFieldCat(FieldCategoryDto fieldCat) {
+    this.fieldCat = fieldCat;
   }
 
   public String getIsSystem() {

@@ -196,6 +196,15 @@ public class SpringSessionSecurityTest {
         AuthSharedTestConstants.TEST_MGR_ROLES, TEST_SESSION_TIMEOUT);
   }
 
+  protected void prepAdminSecuritySession() {
+    prepAdminSecuritySession(TEST_SESSION_TIMEOUT);
+  }
+
+  protected void prepAdminSecuritySession(int timeout) {
+    prepSecuritySession(AuthSharedTestConstants.TEST_ADMIN_NAME,
+        AuthSharedTestConstants.TEST_ADMIN_ROLES, timeout);
+  }
+
   protected void prepUserSecuritySession() {
     prepUserSecuritySession(TEST_SESSION_TIMEOUT);
   }

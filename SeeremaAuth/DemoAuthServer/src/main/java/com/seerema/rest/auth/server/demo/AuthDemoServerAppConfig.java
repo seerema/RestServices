@@ -14,12 +14,14 @@ package com.seerema.rest.auth.server.demo;
 
 import org.springframework.context.annotation.Configuration;
 
+import com.seerema.shared.common.AbstractBaseRestAjpConfig;
+
 /**
  * Configuration class for any Demo Authentication Service
  * 
  */
 
 @Configuration
-public class AuthDemoServerAppConfig extends AjpConnectorSharedConfig {
+public class AuthDemoServerAppConfig extends AbstractBaseRestAjpConfig {
 
 }

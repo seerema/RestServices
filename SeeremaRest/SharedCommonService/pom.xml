@@ -5,7 +5,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>shared-common</artifactId>
+	<artifactId>shared-common-srv</artifactId>
 	<packaging>jar</packaging>
 	<name>SharedCommon</name>
 	<description>Shared common module for all service</description>

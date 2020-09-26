@@ -40,6 +40,10 @@ public class AuthSharedTestConstants {
 
   public static final String TEST_MGR_ROLES = "ROLE_SBS_MANAGER";
 
+  public static final String TEST_ADMIN_NAME = "admin";
+
+  public static final String TEST_ADMIN_ROLES = "ROLE_SBS_ADMIN";
+
   public static final ByteArrayOutputStream LOGS =
       new ByteArrayOutputStream(TEST_USER_NAME.length());
 

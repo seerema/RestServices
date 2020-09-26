@@ -23,6 +23,12 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.seerema.rest</groupId>
+			<artifactId>shared-common-rest</artifactId>
+			<version>${seerema-rest.version}</version>
+		</dependency>
+		
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>com.seerema.rest.auth</groupId>

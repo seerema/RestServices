@@ -10,10 +10,15 @@
  * 
  */
 
-package com.seerema.rest.shared.base.common;
+package com.seerema.shared.common;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.ajp.AjpNioProtocol;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -31,6 +36,9 @@ public abstract class AbstractBaseRestAjpConfig {
   @Value("${tomcat.ajp.enabled:false}")
   boolean tomcatAjpEnabled;
 
+  @Autowired
+  private Logger _log;
+
   @Bean
   public WebServerFactoryCustomizer<TomcatServletWebServerFactory>
       initAjpConnector() {
@@ -45,11 +53,19 @@ public abstract class AbstractBaseRestAjpConfig {
           AjpNioProtocol protocol =
               (AjpNioProtocol) ajpConnector.getProtocolHandler();
           protocol.setSecretRequired(false);
+          try {
+            protocol.setAddress(
+                InetAddress.getByAddress(new byte[] { 0, 0, 0, 0 }));
+          } catch (UnknownHostException e) {
+            _log.error("Unable bind AJP port to 0.0.0.0 interfase - " +
+                e.getMessage());
+          }
 
           ajpConnector.setPort(ajpPort);
           ajpConnector.setSecure(false);
           ajpConnector.setAllowTrace(false);
           ajpConnector.setScheme("http");
+
           factory.addAdditionalTomcatConnectors(ajpConnector);
         }
       }

@@ -16,4 +16,7 @@
     <appender-ref ref="consoleAppender" />
   </root>
 
+  <logger name="Test" level="OFF" additivity="false">
+    <appender-ref ref="consoleAppender" />
+  </logger>
 </configuration>

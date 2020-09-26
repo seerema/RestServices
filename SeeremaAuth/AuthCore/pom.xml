@@ -21,7 +21,7 @@
   <dependencies>
     <dependency>
       <groupId>com.seerema.rest</groupId>
-      <artifactId>shared-common</artifactId>
+      <artifactId>shared-common-srv</artifactId>
       <version>${seerema-rest.version}</version>
     </dependency>
   </dependencies>

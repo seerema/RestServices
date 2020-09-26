@@ -37,7 +37,7 @@ public class FieldCategoryController extends BaseController {
   @Autowired
   private BaseEntityService<FieldCategory, FieldCategoryDto> _service;
 
-  @RequestMapping(value = "/field_cat", method = RequestMethod.PUT,
+  @RequestMapping(value = "/admin/field_cat", method = RequestMethod.PUT,
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public DataGoodResponse create(@Valid @RequestBody FieldCategoryDto dto)
@@ -57,7 +57,7 @@ public class FieldCategoryController extends BaseController {
     return _service.readEntity(id);
   }
 
-  @RequestMapping(value = "/field_cat/{id}", method = RequestMethod.POST,
+  @RequestMapping(value = "/admin/field_cat/{id}", method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public BaseResponse update(@Valid @RequestBody FieldCategoryDto dto)
@@ -65,7 +65,8 @@ public class FieldCategoryController extends BaseController {
     return _service.updateEntity(dto);
   }
 
-  @RequestMapping(value = "/field_cat/{id}", method = RequestMethod.DELETE)
+  @RequestMapping(value = "/admin/field_cat/{id}",
+      method = RequestMethod.DELETE)
   public BaseResponse delete(@PathVariable Integer id) throws WsSrvException {
     return _service.deleteEntity(id);
   }

@@ -26,7 +26,8 @@ import com.seerema.shared.jpa.base.shared.ErrorCodes;
  * Implementation for Field Service
  */
 @Service
-public class FieldServiceImpl extends AbstractEntityServiceImpl<Field, FieldDto> {
+public class FieldServiceImpl
+    extends AbstractEntityServiceImpl<Field, FieldDto> {
 
   @Autowired
   private FieldRepo _repo;
@@ -36,7 +37,7 @@ public class FieldServiceImpl extends AbstractEntityServiceImpl<Field, FieldDto>
 
   @Override
   protected Iterable<Field> findAll() {
-    return _repo.findAllByFieldCategoryModuleId(_mod.getId());
+    return _repo.findAllByFieldCatModuleId(_mod.getId());
   }
 
   @Override

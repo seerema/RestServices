@@ -12,8 +12,12 @@
 
 package com.seerema.shared.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +27,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.seerema.shared.SharedTestAppConfig;
+import com.seerema.shared.common.SharedTestUtils;
+import com.seerema.shared.common.TestConstants;
 import com.seerema.shared.config.RestConfig;
 import com.seerema.shared.service.BaseService;
 import com.seerema.shared.service.impl.AppRestInfo;
@@ -38,9 +44,13 @@ public class BaseServiceTest {
   BaseService<RestConfig> _bs;
 
   @Test
-  public void testGetRestAppVersion() {
+  public void testGetRestAppVersion() throws IOException {
     AppRestInfo info = (AppRestInfo) _bs.getRestInfo();
     assertTrue(info.hasMavenVersion());
     assertNotNull(info.getRestVersion());
+    assertEquals(
+        SharedTestUtils.readAppVersion(TestConstants.TARGET_PATH +
+            "test-classes" + File.separator + "META-INF" + File.separator),
+        info.getRestVersion(), "App Version doesn't match");
   }
 }

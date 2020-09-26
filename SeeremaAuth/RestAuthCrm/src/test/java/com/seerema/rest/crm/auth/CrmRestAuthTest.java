@@ -35,7 +35,7 @@ public class CrmRestAuthTest extends SharedModRestAuthTest {
 
   @Override
   protected String getFieldJson() {
-    return "{\"id\":1," + "\"name\":\"Item\",\"field_category\":{\"id\":1," +
+    return "{\"id\":1," + "\"name\":\"Item\",\"field_cat\":{\"id\":1," +
         "\"name\":\"LL_TEST\",\"read_only\":false},\"read_only\":false}";
   }
 
@@ -48,7 +48,7 @@ public class CrmRestAuthTest extends SharedModRestAuthTest {
   protected String getEntityJson() {
     return "\\{\"id\":1,\"name\":\"Test\"," +
         "\"entity_fields\":\\[\\{\"id\":1,\"field\":\\{\"id\":1,\"name\":\"Item\"," +
-        "\"field_category\":\\{\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false\\}," +
+        "\"field_cat\":\\{\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false\\}," +
         "\"read_only\":false\\},\"value\":\"Test\"\\}\\],\"field_cat\":\\{" +
         "\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false\\},\"status\":\\{" +
         "\"id\":1,\"name\":\"LL_LEAD\"}," +
@@ -67,7 +67,7 @@ public class CrmRestAuthTest extends SharedModRestAuthTest {
   protected String getAllEntities() {
     return "^\\{\"result\":true,\"data\":\\[\\{\"id\":1,\"name\":\"Test\"," +
         "\"entity_fields\":\\[\\{\"id\":1,\"field\":\\{\"id\":1,\"name\":\"Item\"," +
-        "\"field_category\":\\{\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false\\}," +
+        "\"field_cat\":\\{\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false\\}," +
         "\"read_only\":false\\},\"value\":\"Test\"\\}\\],\"field_cat\":\\{" +
         "\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false\\},\"status\":\\{" +
         "\"id\":1,\"name\":\"LL_LEAD\"\\}," +

@@ -77,10 +77,12 @@ public abstract class AbstractSharedEntityControllerTest<T>
 
   @Test
   void testEntityCatalog() throws URISyntaxException {
+    String url = getBaseTestUrl() + getApiPrefix() + getEntityUrl();
+
     // Try update empty DTO
     T entity = getEntity();
-    RequestEntity<T> request = new RequestEntity<T>(entity, HttpMethod.PUT,
-        new URI(getBaseTestUrl() + getEntityUrl()));
+    RequestEntity<T> request =
+        new RequestEntity<T>(entity, HttpMethod.PUT, new URI(url));
 
     checkBadResponse(request);
 
@@ -88,7 +90,7 @@ public abstract class AbstractSharedEntityControllerTest<T>
     setEntityPartial(entity);
     checkBadResponse(request);
 
-    // Correct phone but invalid name
+    // Set Invalid Entity
     setEntityInvalid(entity);
     checkBadResponse(request);
 
@@ -122,7 +124,7 @@ public abstract class AbstractSharedEntityControllerTest<T>
     updateEntity(entity, map);
 
     checkGoodResponse(new RequestEntity<T>(entity, HttpMethod.POST,
-        new URI(getBaseTestUrl() + getEntityUrl() + "/" + getEntityIdx())));
+        new URI(url + "/" + getEntityIdx())));
     checkAfterUpdate(entity);
 
     // Read new name
@@ -134,7 +136,7 @@ public abstract class AbstractSharedEntityControllerTest<T>
         "Updated " + getUpdateIdx() + " doesn't match.");
 
     // Delete entry
-    checkDelete(getBaseTestUrl() + getEntityUrl() + "/" + getEntityIdx());
+    checkDelete(url + "/" + getEntityIdx());
   }
 
   protected boolean isDupError() {
@@ -156,5 +158,9 @@ public abstract class AbstractSharedEntityControllerTest<T>
 
   protected String getBaseTestUrl() {
     return "/" + getModuleName() + "/";
+  }
+
+  protected String getApiPrefix() {
+    return "";
   }
 }

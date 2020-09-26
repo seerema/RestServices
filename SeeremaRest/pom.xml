@@ -42,7 +42,8 @@
 
         <modules>
 		<module>SharedBase</module>
-		<module>SharedCommon</module>
+		<module>SharedCommonService</module>
+		<module>SharedCommonRest</module>
 		<module>SharedConfig</module>
 		<module>SharedRestConfig</module>
 		<module>SharedRestBase</module>

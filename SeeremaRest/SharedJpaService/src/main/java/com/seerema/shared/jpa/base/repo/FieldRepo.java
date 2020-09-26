@@ -20,5 +20,5 @@ import com.seerema.shared.jpa.base.model.Field;
 @Repository
 public interface FieldRepo extends CrudRepository<Field, Integer> {
 
-  Iterable<Field> findAllByFieldCategoryModuleId(int moduleId);
+  Iterable<Field> findAllByFieldCatModuleId(int moduleId);
 }

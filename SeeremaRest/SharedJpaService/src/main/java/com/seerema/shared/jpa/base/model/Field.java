@@ -42,7 +42,7 @@ public class Field extends AbstractEntity implements Serializable {
   // bi-directional many-to-one association to FieldCategory
   @ManyToOne(optional = false)
   @JoinColumn(name = "field_category_id")
-  private FieldCategory fieldCategory;
+  private FieldCategory fieldCat;
 
   // bi-directional many-to-one association to EntityField
   @OneToMany(mappedBy = "field")
@@ -64,12 +64,12 @@ public class Field extends AbstractEntity implements Serializable {
     this.name = name;
   }
 
-  public FieldCategory getFieldCategory() {
-    return this.fieldCategory;
+  public FieldCategory getFieldCat() {
+    return fieldCat;
   }
 
-  public void setFieldCategory(FieldCategory fieldCategory) {
-    this.fieldCategory = fieldCategory;
+  public void setFieldCat(FieldCategory fieldCat) {
+    this.fieldCat = fieldCat;
   }
 
   public List<EntityField> getEntityFields() {

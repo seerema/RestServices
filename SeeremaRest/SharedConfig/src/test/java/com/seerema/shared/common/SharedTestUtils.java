@@ -13,8 +13,15 @@
 package com.seerema.shared.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 /**
@@ -33,5 +40,37 @@ public abstract class SharedTestUtils {
     } else {
       assertEquals(expected, actual, msg);
     }
+  }
+
+  /**
+   * Read App Version from WebApp version file
+   * 
+   * @throws IOException
+   */
+  public static String readAppVersion() throws IOException {
+    return readAppVersion(TestConstants.WORK_WEBAPP_DIR);
+  }
+
+  /**
+   * Read App Version from WebApp version file
+   * 
+   * @param dir Directory where version file is located
+   * @throws IOException
+   */
+  public static String readAppVersion(String dir) throws IOException {
+    File f = new File(dir + TestConstants.WEBAPP_VERSION_FNAME);
+    if (!f.exists())
+      fail("File '" + TestConstants.WEBAPP_VERSION_PATH + " not found");
+
+    BufferedReader vf = new BufferedReader(new FileReader(f));
+    String version = vf.readLine();
+    vf.close();
+
+    assertNotNull(version,
+        "Version in " + TestConstants.WEBAPP_VERSION_PATH + " file is null");
+    assertNotEquals("", version,
+        "Version in " + TestConstants.WEBAPP_VERSION_PATH + " file is empty");
+
+    return version;
   }
 }

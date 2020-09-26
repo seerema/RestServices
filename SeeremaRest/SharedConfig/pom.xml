@@ -34,7 +34,7 @@
 
 		<dependency>
 			<groupId>com.seerema.rest</groupId>
-			<artifactId>shared-common</artifactId>
+			<artifactId>shared-common-srv</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
@@ -65,6 +65,28 @@
 						<goals>
 							<goal>test-jar</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>generate-test-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/test-classes/META-INF</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/test/filtered</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

@@ -82,4 +82,8 @@ public class FieldCategoryControllerTest
     return new FieldCategoryDto();
   }
 
+  @Override
+  protected String getApiPrefix() {
+    return "admin/";
+  }
 }

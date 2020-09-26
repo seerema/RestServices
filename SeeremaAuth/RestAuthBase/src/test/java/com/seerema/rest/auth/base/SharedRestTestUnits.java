@@ -116,8 +116,15 @@ public abstract class SharedRestTestUnits extends SpringSessionSecurityTest {
     }
 
     // Try Delete entity as user
-    checkDeleteForbidden(getBaseUrl() + "/" + name + "/" + id,
-        request.getHeaders());
+    // Switch to user's access
+    prepUserSecuritySession(10);
+    checkDeleteForbidden(
+        getBaseUrl() + getApiPrefix(name) + "/" + name + "/" + id,
+        prepHttpHeaders());
+  }
+
+  protected String getApiPrefix(String api) {
+    return "";
   }
 
   protected void checkDeleteForbidden(String url, HttpHeaders headers)
@@ -130,10 +137,10 @@ public abstract class SharedRestTestUnits extends SpringSessionSecurityTest {
   }
 
   protected void dropEntity(String name) throws URISyntaxException {
-    // Try Delete entity as manager
-    prepMgrSecuritySession();
+    // Delete entity as admin
+    prepAdminSecuritySession();
     HttpHeaders headers = prepHttpHeaders();
-    dropEntity(getBaseUrl() + "/" + name + "/1", headers);
+    dropEntity(getBaseUrl() + getApiPrefix(name) + "/" + name + "/1", headers);
   }
 
   protected void dropEntity(String url, HttpHeaders headers)

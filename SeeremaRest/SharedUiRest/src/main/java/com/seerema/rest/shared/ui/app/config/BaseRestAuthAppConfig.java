@@ -10,15 +10,14 @@
  * 
  */
 
-package com.seerema.rest.auth.base;
+package com.seerema.rest.shared.ui.app.config;
 
 import org.springframework.context.annotation.Configuration;
 
-import com.seerema.rest.shared.base.common.AbstractBaseRestAjpConfig;
+import com.seerema.shared.common.AbstractBaseRestAjpConfig;
 
 /**
- * Configuration class for any Demo Authentication Service
- * 
+ * AJP Configuration
  */
 
 @Configuration

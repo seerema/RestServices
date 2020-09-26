@@ -23,53 +23,53 @@
 			<version>${project.version}</version>
 		</dependency>
 
-    <dependency>
-      <groupId>com.seerema.rest</groupId>
-      <artifactId>shared-jpa-status-srv</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.seerema.rest</groupId>
-      <artifactId>shared-rest-base</artifactId>
-      <version>${seerema-rest.version}</version>
-    </dependency>
-    
+		<dependency>
+			<groupId>com.seerema.rest</groupId>
+			<artifactId>shared-jpa-status-srv</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.seerema.rest</groupId>
+			<artifactId>shared-rest-base</artifactId>
+			<version>${seerema-rest.version}</version>
+		</dependency>
+
 		<!-- Test dependencies -->
 		<dependency>
-      <groupId>com.seerema.rest.auth</groupId>
-      <artifactId>auth-shared-rest</artifactId>
-      <version>${project.version}</version>
-      <type>test-jar</type>
-      <scope>test</scope>
-    </dependency>
+			<groupId>com.seerema.rest.auth</groupId>
+			<artifactId>auth-shared-rest</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
+		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
 
-          <execution>
-            <id>default-test-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>test-jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+					<execution>
+						<id>default-test-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-    </plugins>
-  </build>
+		</plugins>
+	</build>
 
 	<profiles>
 		<profile>

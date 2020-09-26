@@ -12,9 +12,11 @@
 
 package com.seerema.shared.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.jar.Manifest;
 
 import javax.annotation.PostConstruct;
@@ -71,10 +73,22 @@ public class AppRestInfo implements RestInfo {
 
     InputStream is = null;
     try {
-      is = classPath.startsWith("jar")
-          ? new URL(classPath.substring(0, classPath.lastIndexOf("!") + 1) +
-              MANIFEST_PATH).openStream()
-          : this.getClass().getResourceAsStream(MANIFEST_PATH);
+      if (classPath.startsWith("jar")) {
+        is = new URL(classPath.substring(0, classPath.lastIndexOf("!") + 1) +
+            MANIFEST_PATH).openStream();
+      } else {
+        // Find correct class-path
+        Enumeration<URL> resources =
+            getClass().getClassLoader().getResources("META-INF/MANIFEST.MF");
+        File dir = new File("");
+        while (resources.hasMoreElements()) {
+          URL url = resources.nextElement();
+          if (url.toString().startsWith("file:" + dir.getAbsolutePath())) {
+            is = url.openStream();
+            break;
+          }
+        }
+      }
     } catch (IOException e) {
       _log.error("Error reading Version from MANIFEST.MF: " + e.getMessage());
     }

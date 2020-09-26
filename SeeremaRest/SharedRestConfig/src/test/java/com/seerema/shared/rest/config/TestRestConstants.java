@@ -12,27 +12,13 @@
 
 package com.seerema.shared.rest.config;
 
-import java.io.File;
 import java.util.concurrent.CountDownLatch;
-
-import com.seerema.shared.common.TestConstants;
 
 /**
  * Constants used solely by unit and/or integration test
  * 
  */
 public class TestRestConstants {
-
-  // target/rest
-  public static final String WORK_WEBAPP_PATH =
-      TestConstants.TARGET_PATH + "rest";
-
-  // target/rest/
-  public static final String WORK_WEBAPP_DIR =
-      WORK_WEBAPP_PATH + File.separator;
-
-  // target/rest/version
-  public static final String WEBAPP_VERSION_PATH = WORK_WEBAPP_DIR + "version";
 
   // Sync lock
   public static Object lock = new Object();

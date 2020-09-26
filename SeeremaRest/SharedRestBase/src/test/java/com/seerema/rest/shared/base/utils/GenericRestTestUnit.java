@@ -31,6 +31,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.seerema.shared.common.SharedTestUtils;
+
 /**
  * Base class for web test unit
  * 
@@ -160,7 +162,7 @@ public abstract class GenericRestTestUnit {
 
   @Test
   public void testVersion() throws IOException {
-    checkWebResponse(VERSION_PATH, CommonWebTestUtils.readAppVersion());
+    checkWebResponse(VERSION_PATH, SharedTestUtils.readAppVersion());
   }
 
   /************************************************************/

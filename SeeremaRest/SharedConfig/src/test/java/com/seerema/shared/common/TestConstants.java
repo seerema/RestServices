@@ -59,6 +59,21 @@ public class TestConstants {
   // - /target/logs
   public static final String LOG_DIR = TARGET_PATH + "logs";
 
+  // - target/rest
+  public static final String WORK_WEBAPP_PATH =
+      TestConstants.TARGET_PATH + "rest";
+
+  // - target/rest/
+  public static final String WORK_WEBAPP_DIR =
+      WORK_WEBAPP_PATH + File.separator;
+
+  // - version
+  public static final String WEBAPP_VERSION_FNAME = "version";
+
+  // - target/rest/version
+  public static final String WEBAPP_VERSION_PATH =
+      WORK_WEBAPP_DIR + WEBAPP_VERSION_FNAME;
+
   public static final Logger LOG = LoggerFactory.getLogger("Test");
 
   // Multi-thread parameters

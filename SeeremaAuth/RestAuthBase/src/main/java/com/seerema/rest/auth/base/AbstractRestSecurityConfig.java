@@ -41,18 +41,12 @@ public abstract class AbstractRestSecurityConfig
  
         /************* Quest API *************/
 
-        // All quests view restriction
+        // All entities view restriction
         .antMatchers(HttpMethod.GET,
             "/" + getModuleName() + "/entities/all").
             hasAnyRole("SBS_MANAGER","SBS_ADMIN")
         
-        // Restrict any task delete
-        .antMatchers(HttpMethod.DELETE, 
-            "/" + getModuleName() +"/field_cat/{\\d+}").
-            hasAnyRole("SBS_MANAGER","SBS_ADMIN")
-        .antMatchers(HttpMethod.DELETE, 
-            "/" + getModuleName() +"/field/{\\d+}").
-            hasAnyRole("SBS_MANAGER","SBS_ADMIN")
+        // Restrict any entity delete
         .antMatchers(HttpMethod.DELETE, 
             "/" + getModuleName() +"/entity/{\\d+}").
             hasAnyRole("SBS_MANAGER","SBS_ADMIN")
@@ -65,7 +59,11 @@ public abstract class AbstractRestSecurityConfig
         // All private api
         .antMatchers(HttpMethod.GET,
             "/" + getModuleName() + "/private/**").
-            hasAnyRole("SBS_MANAGER", "SBS_ADMIN").and();
+            hasAnyRole("SBS_MANAGER", "SBS_ADMIN")
+        
+        /************* ADMIN API *************/
+        .antMatchers("/" + getModuleName() + "/admin/**").
+            hasAnyRole("SBS_ADMIN").and();
         
         /************* CUSTOM API *************/
     
