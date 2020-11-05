@@ -20,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import com.seerema.crm.srv.shared.CrmConstants;
 import com.seerema.rest.auth.base.SharedModRestAuthTest;
 import com.seerema.rest.auth.base.SharedRestConstants;
+import com.seerema.rest.shared.base.common.RestBaseConstants;
 
 /**
  * Test class for Crm Auth Rest API
@@ -88,6 +89,8 @@ public class CrmRestAuthTest extends SharedModRestAuthTest {
     prepUserSecuritySession();
     HttpHeaders headers = prepHttpHeaders();
 
-    checkDeleteForbidden("/crm/cust_comm_history/1", headers);
+    checkDeleteForbidden(
+        getBaseUrl() + RestBaseConstants.PRIVATE_URL + "/cust_comm_history/1",
+        headers);
   }
 }

@@ -12,11 +12,8 @@
 
 package com.seerema.shared.jpa.base.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.seerema.base.WsSrvException;
 import com.seerema.shared.dto.AbstractEntityDto;
-import com.seerema.shared.dto.ModuleDto;
 import com.seerema.shared.jpa.base.model.AbstractEntityModule;
 import com.seerema.shared.jpa.base.model.Module;
 
@@ -30,13 +27,12 @@ import com.seerema.shared.jpa.base.model.Module;
 public abstract class AbstractEntityModuleServiceImpl<T1 extends AbstractEntityModule, T2 extends AbstractEntityDto>
     extends AbstractEntityServiceImpl<T1, T2> {
 
-  @Autowired
-  private ModuleDto _mod;
+  protected abstract int getModuleId();
 
   @Override
   public T1 createEntity(T1 entity) throws WsSrvException {
     // Inject module into entity
-    entity.setModule(new Module(_mod.getId()));
+    entity.setModule(new Module(getModuleId()));
 
     return super.createEntity(entity);
   }
@@ -44,7 +40,7 @@ public abstract class AbstractEntityModuleServiceImpl<T1 extends AbstractEntityM
   @Override
   public T1 updateEntity(T1 entity) throws WsSrvException {
     // Inject module into entity
-    entity.setModule(new Module(_mod.getId()));
+    entity.setModule(new Module(getModuleId()));
 
     return super.updateEntity(entity);
   }

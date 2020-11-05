@@ -68,6 +68,8 @@ public abstract class AbstractSharedEntityControllerTest<T>
 
   protected abstract String getModuleName();
 
+  protected abstract String getSecurityPrefix();
+
   @Test
   void testReadAll() {
     int idx = getEntityIdx() - 1;
@@ -136,7 +138,8 @@ public abstract class AbstractSharedEntityControllerTest<T>
         "Updated " + getUpdateIdx() + " doesn't match.");
 
     // Delete entry
-    checkDelete(url + "/" + getEntityIdx());
+    checkDelete(getBaseTestUrl() + getSecurityPrefix() + getApiPrefix() +
+        getEntityUrl() + "/" + getEntityIdx());
   }
 
   protected boolean isDupError() {

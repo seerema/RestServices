@@ -35,4 +35,9 @@ public abstract class AbstractSharedEntityRestControllerTest<T1>
   protected ModuleDto getModule() {
     return _mod;
   }
+
+  @Override
+  protected String getSecurityPrefix() {
+    return "";
+  }
 }

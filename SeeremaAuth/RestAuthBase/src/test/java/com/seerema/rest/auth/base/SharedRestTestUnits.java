@@ -29,6 +29,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.seerema.rest.auth.shared.common.AuthSharedTestUtils;
 import com.seerema.rest.auth.shared.test.SpringSessionSecurityTest;
+import com.seerema.rest.shared.base.common.RestBaseConstants;
 
 /**
  * Test Configuration class for Base Rest API
@@ -118,9 +119,8 @@ public abstract class SharedRestTestUnits extends SpringSessionSecurityTest {
     // Try Delete entity as user
     // Switch to user's access
     prepUserSecuritySession(10);
-    checkDeleteForbidden(
-        getBaseUrl() + getApiPrefix(name) + "/" + name + "/" + id,
-        prepHttpHeaders());
+    checkDeleteForbidden(getBaseUrl() + RestBaseConstants.PRIVATE_URL +
+        getApiPrefix(name) + "/" + name + "/" + id, prepHttpHeaders());
   }
 
   protected String getApiPrefix(String api) {
@@ -140,7 +140,8 @@ public abstract class SharedRestTestUnits extends SpringSessionSecurityTest {
     // Delete entity as admin
     prepAdminSecuritySession();
     HttpHeaders headers = prepHttpHeaders();
-    dropEntity(getBaseUrl() + getApiPrefix(name) + "/" + name + "/1", headers);
+    dropEntity(getBaseUrl() + RestBaseConstants.PRIVATE_URL +
+        getApiPrefix(name) + "/" + name + "/1", headers);
   }
 
   protected void dropEntity(String url, HttpHeaders headers)

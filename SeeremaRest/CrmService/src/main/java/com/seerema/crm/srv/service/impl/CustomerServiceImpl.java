@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,11 @@ import com.seerema.crm.srv.service.CustCommHistoryService;
 import com.seerema.crm.srv.service.CustomerService;
 import com.seerema.crm.srv.shared.CrmConstants;
 import com.seerema.crm.srv.shared.ErrorCodes;
+import com.seerema.shared.dto.EntityDto;
 import com.seerema.shared.dto.EntityExDto;
+import com.seerema.shared.dto.ModuleDto;
+import com.seerema.shared.jpa.base.model.DbEntity;
+import com.seerema.shared.jpa.base.service.EntityService;
 import com.seerema.shared.jpa.status.model.EntityEx;
 import com.seerema.shared.jpa.status.service.impl.AbstractEntityStatusServiceImpl;
 import com.seerema.shared.rest.response.DataGoodResponse;
@@ -44,6 +49,14 @@ public class CustomerServiceImpl extends AbstractEntityStatusServiceImpl
 
   @Autowired
   private CustCommHistoryService _hsrv;
+
+  @Autowired
+  @Qualifier("mod_" + CrmConstants.MODULE_NAME)
+  private ModuleDto _mod;
+
+  @Autowired
+  @Qualifier("entity_" + CrmConstants.MODULE_NAME)
+  private EntityService<DbEntity, EntityDto> _srv;
 
   @Override
   public DataGoodResponse findUserLeads(String username) throws WsSrvException {
@@ -114,5 +127,15 @@ public class CustomerServiceImpl extends AbstractEntityStatusServiceImpl
     }
 
     return result;
+  }
+
+  @Override
+  protected int getModuleId() {
+    return _mod.getId();
+  }
+
+  @Override
+  protected EntityService<DbEntity, EntityDto> getEntityService() {
+    return _srv;
   }
 }

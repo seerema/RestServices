@@ -27,5 +27,4 @@ public abstract class AbstractSharedJpaTestAppConfig extends BaseTestAppConfig {
   public ModuleDto getModuleDto() {
     return new ModuleDto(0);
   }
-
 }

@@ -13,6 +13,7 @@
 package com.seerema.catalog.rest.shared.test;
 
 import com.seerema.catalog.srv.shared.CatalogConstants;
+import com.seerema.rest.shared.base.common.RestBaseConstants;
 import com.seerema.rest.shared.base.rest.AbstractSharedEntityControllerTest;
 
 /**
@@ -26,5 +27,10 @@ public abstract class AbstractSharedCatalogControllerTest<T>
   @Override
   protected String getModuleName() {
     return CatalogConstants.MODULE_NAME;
+  }
+
+  @Override
+  protected String getSecurityPrefix() {
+    return RestBaseConstants.SECURITY_PREFIX + "/";
   }
 }

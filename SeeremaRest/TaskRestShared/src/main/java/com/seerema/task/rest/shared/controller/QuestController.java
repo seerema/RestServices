@@ -22,7 +22,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seerema.base.WsSrvException;
-import com.seerema.rest.entity_ex.shared.controller.EntityExController;
+import com.seerema.rest.entity_ex.shared.controller.AbstractEntityExController;
+import com.seerema.shared.dto.EntityExDto;
+import com.seerema.shared.jpa.status.model.EntityEx;
+import com.seerema.shared.jpa.status.service.EntityStatusService;
 import com.seerema.shared.rest.response.DataGoodResponse;
 import com.seerema.task.srv.service.QuestService;
 import com.seerema.task.srv.shared.TaskConstants;
@@ -34,10 +37,10 @@ import com.seerema.task.srv.shared.TaskConstants;
 @Validated
 @RestController
 @RequestMapping("/" + TaskConstants.MODULE_NAME)
-public class QuestController extends EntityExController {
+public class QuestController extends AbstractEntityExController {
 
   @Autowired
-  private QuestService _service;
+  private QuestService _quest_service;
 
   /****************** USER API ******************/
 
@@ -45,7 +48,7 @@ public class QuestController extends EntityExController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DataGoodResponse readActiveUser(HttpServletRequest req)
       throws WsSrvException {
-    return _service.readUserActiveQuests(getUserName(req));
+    return _quest_service.readUserActiveQuests(getUserName(req));
   }
 
   /****************** PRIVATE API ******************/
@@ -54,6 +57,12 @@ public class QuestController extends EntityExController {
       method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
   public DataGoodResponse readActive(HttpServletRequest req)
       throws WsSrvException {
-    return _service.readAllActiveQuests();
+    return _quest_service.readAllActiveQuests();
+  }
+
+  @Override
+  protected EntityStatusService<EntityEx, EntityExDto>
+      getEntityStatusService() {
+    return _quest_service;
   }
 }

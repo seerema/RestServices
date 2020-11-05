@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.seerema.base.WsSrvException;
 import com.seerema.catalog.srv.shared.CatalogConstants;
+import com.seerema.rest.shared.base.common.RestBaseConstants;
 import com.seerema.rest.shared.base.controller.BaseController;
 import com.seerema.shared.dto.CommMediaDto;
 import com.seerema.shared.jpa.base.model.CommMedia;
@@ -72,7 +73,8 @@ public class CommMediaCatalogController extends BaseController {
     return _service.updateEntity(cmedia);
   }
 
-  @RequestMapping(value = "/comm_media/{id}", method = RequestMethod.DELETE)
+  @RequestMapping(value = RestBaseConstants.PRIVATE_URL + "/comm_media/{id}",
+      method = RequestMethod.DELETE)
   public BaseResponse delete(@PathVariable Integer id) throws WsSrvException {
     return _service.deleteEntity(id);
   }

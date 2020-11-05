@@ -12,12 +12,17 @@
 
 package com.seerema.crm.rest.shared.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seerema.crm.srv.shared.CrmConstants;
-import com.seerema.rest.entity.shared.controller.FieldController;
+import com.seerema.rest.entity.shared.controller.AbstractFieldController;
+import com.seerema.shared.dto.FieldDto;
+import com.seerema.shared.jpa.base.model.Field;
+import com.seerema.shared.jpa.base.service.BaseEntityService;
 
 /**
  * CRM Field REST API
@@ -26,6 +31,14 @@ import com.seerema.rest.entity.shared.controller.FieldController;
 @Validated
 @RestController
 @RequestMapping("/" + CrmConstants.MODULE_NAME)
-public class CrmFieldController extends FieldController {
+public class CrmFieldController extends AbstractFieldController {
 
+  @Autowired
+  @Qualifier("field_" + CrmConstants.MODULE_NAME)
+  private BaseEntityService<Field, FieldDto> _service;
+
+  @Override
+  protected BaseEntityService<Field, FieldDto> getFieldService() {
+    return _service;
+  }
 }

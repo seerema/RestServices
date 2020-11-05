@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>com.seerema.rest</groupId>
 		<artifactId>parent</artifactId>
-		<version>2.0.0</version>
+		<version>2.2.0</version>
 		<relativePath>../</relativePath>
 	</parent>
 
@@ -44,6 +44,22 @@
 		<!-- Test dependency -->
 		<dependency>
 			<groupId>com.seerema.rest</groupId>
+			<artifactId>shared-jpa-srv</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.seerema.rest</groupId>
+			<artifactId>shared-jpa-status-srv</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.seerema.rest</groupId>
 			<artifactId>shared-entity-rest</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
@@ -69,14 +85,6 @@
 		<dependency>
 			<groupId>com.seerema.rest</groupId>
 			<artifactId>shared-rest-base</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.seerema.rest</groupId>
-			<artifactId>shared-entity-rest</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>

@@ -13,10 +13,15 @@
 package com.seerema.task.srv.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.seerema.base.WsSrvException;
+import com.seerema.shared.dto.EntityDto;
+import com.seerema.shared.dto.ModuleDto;
+import com.seerema.shared.jpa.base.model.DbEntity;
+import com.seerema.shared.jpa.base.service.EntityService;
 import com.seerema.shared.jpa.status.model.EntityEx;
 import com.seerema.shared.jpa.status.service.impl.AbstractEntityStatusServiceImpl;
 import com.seerema.shared.rest.response.DataGoodResponse;
@@ -34,6 +39,19 @@ public class QuestServiceImpl extends AbstractEntityStatusServiceImpl
 
   @Autowired
   private QuestRepo _repo;
+
+  @Autowired
+  @Qualifier("mod_" + TaskConstants.MODULE_NAME)
+  private ModuleDto _mod;
+
+  @Autowired
+  @Qualifier("entity_" + TaskConstants.MODULE_NAME)
+  private EntityService<DbEntity, EntityDto> _srv;
+
+  @Override
+  protected int getModuleId() {
+    return _mod.getId();
+  }
 
   @Override
   public DataGoodResponse readUserActiveQuests(String username)
@@ -70,4 +88,8 @@ public class QuestServiceImpl extends AbstractEntityStatusServiceImpl
     return TaskConstants.TASK_NEW_STATUS;
   }
 
+  @Override
+  protected EntityService<DbEntity, EntityDto> getEntityService() {
+    return _srv;
+  }
 }

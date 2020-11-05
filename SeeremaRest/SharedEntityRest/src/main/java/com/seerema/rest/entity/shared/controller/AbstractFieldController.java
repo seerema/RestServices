@@ -14,7 +14,6 @@ package com.seerema.rest.entity.shared.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,51 +22,49 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.seerema.base.WsSrvException;
 import com.seerema.rest.shared.base.controller.BaseController;
-import com.seerema.shared.dto.EntityFieldDto;
-import com.seerema.shared.jpa.base.model.EntityField;
+import com.seerema.shared.dto.FieldDto;
+import com.seerema.shared.jpa.base.model.Field;
 import com.seerema.shared.jpa.base.service.BaseEntityService;
 import com.seerema.shared.rest.response.BaseResponse;
 import com.seerema.shared.rest.response.DataGoodResponse;
 
 /**
- * EntityField REST API
+ * Task Field REST API
  */
+public abstract class AbstractFieldController extends BaseController {
 
-public class EntityFieldController extends BaseController {
+  protected abstract BaseEntityService<Field, FieldDto> getFieldService();
 
-  @Autowired
-  private BaseEntityService<EntityField, EntityFieldDto> _service;
-
-  @RequestMapping(value = "/entity_field", method = RequestMethod.PUT,
+  @RequestMapping(value = "/admin/field", method = RequestMethod.PUT,
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE)
-  public DataGoodResponse create(@Valid @RequestBody EntityFieldDto dto)
+  public DataGoodResponse create(@Valid @RequestBody FieldDto field)
       throws WsSrvException {
-    return _service.createEntity(dto);
+    return getFieldService().createEntity(field);
   }
 
-  @RequestMapping(value = "/entity_fields", method = RequestMethod.GET,
+  @RequestMapping(value = "/fields", method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DataGoodResponse readAll() throws WsSrvException {
-    return _service.readEntities();
+    return getFieldService().readEntities();
   }
 
-  @RequestMapping(value = "/entity_field/{id}", method = RequestMethod.GET,
+  @RequestMapping(value = "/field/{id}", method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DataGoodResponse read(@PathVariable Integer id) throws WsSrvException {
-    return _service.readEntity(id);
+    return getFieldService().readEntity(id);
   }
 
-  @RequestMapping(value = "/entity_field/{id}", method = RequestMethod.POST,
+  @RequestMapping(value = "/admin/field/{id}", method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE)
-  public BaseResponse update(@Valid @RequestBody EntityFieldDto dto)
+  public BaseResponse update(@Valid @RequestBody FieldDto field)
       throws WsSrvException {
-    return _service.updateEntity(dto);
+    return getFieldService().updateEntity(field);
   }
 
-  @RequestMapping(value = "/entity_field/{id}", method = RequestMethod.DELETE)
+  @RequestMapping(value = "/admin/field/{id}", method = RequestMethod.DELETE)
   public BaseResponse delete(@PathVariable Integer id) throws WsSrvException {
-    return _service.deleteEntity(id);
+    return getFieldService().deleteEntity(id);
   }
 }

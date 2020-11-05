@@ -41,7 +41,6 @@ import com.seerema.shared.dto.FieldDto;
 import com.seerema.shared.dto.StatusDto;
 import com.seerema.shared.dto.UserDto;
 import com.seerema.shared.jpa.base.model.DbEntity;
-import com.seerema.shared.jpa.base.model.EntityField;
 import com.seerema.shared.jpa.base.model.Field;
 import com.seerema.shared.jpa.base.model.FieldCategory;
 import com.seerema.shared.jpa.base.service.BaseEntityService;
@@ -72,9 +71,6 @@ public abstract class AbstractEntityStatusServiceTest {
 
   @Autowired
   private BaseEntityService<Field, FieldDto> fieldSrv;
-
-  @Autowired
-  private BaseEntityService<EntityField, EntityFieldDto> entityFieldSrv;
 
   @Autowired
   private StatusService statusSrv;
@@ -137,12 +133,6 @@ public abstract class AbstractEntityStatusServiceTest {
           e.getMessage());
     }
 
-    // Read Entity Field
-    EntityFieldDto cfield = SharedJpaTestUtils.checkNonEmptyGoodResponse(
-        entityFieldSrv.readEntity(1), 1, EntityFieldDto.class);
-    assertEquals(getEntityFieldValue(), cfield.getValue(),
-        "Entity Field value not found.");
-
     // Read Entity
     EntityExDto entity = SharedJpaTestUtils.checkNonEmptyGoodResponse(
         entityExSrv.readEntity(1), 1, EntityExDto.class);
@@ -171,7 +161,7 @@ public abstract class AbstractEntityStatusServiceTest {
   }
 
   private void checkEntity() throws WsSrvException, IOException {
-    // Create entity dto
+    // Create entity dto as Anonymous user
     EntityExDto dto = new EntityExDto();
     dto.setName("Temp");
 
@@ -272,6 +262,8 @@ public abstract class AbstractEntityStatusServiceTest {
     assertEquals(1, dto3.getEntityFields().size(),
         "Size of Entity Fields doesn't match.");
 
+    runCheck(3);
+
     /******** DTO 4 ********/
 
     // Change entity status
@@ -282,7 +274,7 @@ public abstract class AbstractEntityStatusServiceTest {
     assertEquals(getStatusNum(), slist.size(),
         "Number of entity statuses doesn't match.");
 
-    dto3.getStatus().setId(slist.get(1).getId());
+    dto3.getStatus().setId(slist.get(slist.size() - 1).getId());
 
     // Update entity with new status
     EntityExDto dto4 = updateEntityUser(dto3);
@@ -290,6 +282,8 @@ public abstract class AbstractEntityStatusServiceTest {
     // Check entity ownership didn't change but status registered for different user
     assertEquals(dto4.getUser().getName(), Constants.ANONYMOUS_USER);
     checkEntityStatus(dto4, 2, TEST_USER_NAME);
+
+    runCheck(4);
 
     /******** DTO 5 ********/
     // Change existing entity field
@@ -314,6 +308,8 @@ public abstract class AbstractEntityStatusServiceTest {
     assertEquals(value, dto5.getEntityFields().get(0).getValue(),
         "DTO4 EntityField value #0 doesn't match.");
     checkEntityStatus(dto5, 2, TEST_USER_NAME);
+
+    runCheck(5);
 
     /******** FINAL ********/
     // Check the number of entities and entity_ex same

@@ -27,6 +27,7 @@ import com.seerema.base.WsSrvException;
 import com.seerema.catalog.srv.dto.AddressDto;
 import com.seerema.catalog.srv.jpa.model.Address;
 import com.seerema.catalog.srv.shared.CatalogConstants;
+import com.seerema.rest.shared.base.common.RestBaseConstants;
 import com.seerema.rest.shared.base.controller.BaseController;
 import com.seerema.shared.jpa.base.service.BaseEntityService;
 import com.seerema.shared.rest.response.BaseResponse;
@@ -72,7 +73,8 @@ public class AddressCatalogController extends BaseController {
     return _service.updateEntity(address);
   }
 
-  @RequestMapping(value = "/address/{id}", method = RequestMethod.DELETE)
+  @RequestMapping(value = RestBaseConstants.PRIVATE_URL + "/address/{id}",
+      method = RequestMethod.DELETE)
   public BaseResponse delete(@PathVariable Integer id) throws WsSrvException {
     return _service.deleteEntity(id);
   }

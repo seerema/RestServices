@@ -13,7 +13,6 @@
 package com.seerema.shared.jpa.base;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 
 import com.seerema.base.WsSrvException;
 import com.seerema.shared.dto.ModuleDto;
@@ -30,12 +29,9 @@ public abstract class AbstractJpaConfiguration {
   @Autowired
   private ModuleRepo _repo;
 
-  protected abstract String getModuleName();
-
-  @Bean
-  public ModuleDto getModule() throws WsSrvException {
+  protected ModuleDto getModule(String name) throws WsSrvException {
     // Find module
-    Module module = _repo.findByName(getModuleName());
+    Module module = _repo.findByName(name);
 
     return new EntityMapper().map(module, ModuleDto.class);
   }

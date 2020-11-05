@@ -12,20 +12,21 @@
 
 package com.seerema.rest.entity_ex.shared;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seerema.rest.entity.shared.AbstractEntityRestTestConfiguration;
-import com.seerema.rest.entity_ex.shared.controller.EntityExController;
+import com.seerema.rest.entity_ex.shared.controller.AbstractEntityExController;
 import com.seerema.shared.dto.EntityExDto;
+import com.seerema.shared.jpa.status.SharedJpaStatusServicesConfig;
 import com.seerema.shared.jpa.status.model.EntityEx;
 import com.seerema.shared.jpa.status.service.EntityStatusService;
-import com.seerema.shared.jpa.status.service.impl.AbstractEntityStatusServiceImpl;
 
 /**
  * Test Configuration for Catalog tests
@@ -33,7 +34,8 @@ import com.seerema.shared.jpa.status.service.impl.AbstractEntityStatusServiceImp
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @EnableConfigurationProperties
-public class TestSharedModRestConfiguration
+@Import(SharedJpaStatusServicesConfig.class)
+public class SharedEntityStatusRestTestAppConfiguration
     extends AbstractEntityRestTestConfiguration {
 
   @Override
@@ -44,18 +46,16 @@ public class TestSharedModRestConfiguration
   @Validated
   @RestController
   @RequestMapping("/test")
-  public class TestEntityExController extends EntityExController {
+  public class TestEntityExController extends AbstractEntityExController {
 
-  }
+    @Autowired
+    private EntityStatusService<EntityEx, EntityExDto> _service;
 
-  @Bean
-  public EntityStatusService<EntityEx, EntityExDto> entityServiceStatus() {
-    return new AbstractEntityStatusServiceImpl() {
+    @Override
+    protected EntityStatusService<EntityEx, EntityExDto>
+        getEntityStatusService() {
+      return _service;
+    }
 
-      @Override
-      protected String getNewStatus() {
-        return "LL_NEW";
-      }
-    };
   }
 }

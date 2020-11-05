@@ -49,4 +49,10 @@ public class RestBaseConstants {
   // Session parameter name that that was set by authentication server. It holds
   // user name used during login
   public static final String USER_NAME_KEY = "userName";
+
+  public final static String SECURITY_PREFIX = "private";
+
+  public final static String SECURITY_PREFIX_URL = SECURITY_PREFIX + "/";
+
+  public final static String PRIVATE_URL = "/" + SECURITY_PREFIX;
 }

@@ -20,11 +20,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Service;
 
 import com.seerema.base.WsSrvException;
 import com.seerema.shared.dto.EntityDto;
-import com.seerema.shared.dto.ModuleDto;
 import com.seerema.shared.jpa.base.model.DbEntity;
 import com.seerema.shared.jpa.base.model.EntityField;
 import com.seerema.shared.jpa.base.repo.DbEntityRepo;
@@ -38,8 +36,7 @@ import com.seerema.shared.rest.response.DataGoodResponse;
  * 
  * @param <EntityDto> AbstractEntityDto
  */
-@Service
-public class BaseEntityServiceImpl
+public abstract class AbstractBaseEntityServiceImpl
     extends AbstractEntityModuleServiceImpl<DbEntity, EntityDto>
     implements EntityService<DbEntity, EntityDto> {
 
@@ -48,9 +45,6 @@ public class BaseEntityServiceImpl
 
   @Autowired
   private DbEntityRepo _drepo;
-
-  @Autowired
-  private ModuleDto _mod;
 
   @Override
   public DataGoodResponse createEntity(EntityDto dto) throws WsSrvException {
@@ -135,7 +129,7 @@ public class BaseEntityServiceImpl
 
   @Override
   protected Iterable<DbEntity> findAll() {
-    return _drepo.findAllByModuleIdOrderByNameAsc(_mod.getId());
+    return _drepo.findAllByModuleIdOrderByNameAsc(getModuleId());
   }
 
   @Override

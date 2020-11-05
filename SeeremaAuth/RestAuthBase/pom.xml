@@ -26,7 +26,7 @@
 		<dependency>
 			<groupId>com.seerema.rest</groupId>
 			<artifactId>shared-jpa-status-srv</artifactId>
-			<version>${project.version}</version>
+			<version>${seerema-rest.version}</version>
 		</dependency>
 
 		<dependency>

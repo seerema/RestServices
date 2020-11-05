@@ -27,6 +27,7 @@ import com.seerema.base.WsSrvException;
 import com.seerema.catalog.srv.dto.RegionDto;
 import com.seerema.catalog.srv.jpa.model.Region;
 import com.seerema.catalog.srv.shared.CatalogConstants;
+import com.seerema.rest.shared.base.common.RestBaseConstants;
 import com.seerema.rest.shared.base.controller.BaseController;
 import com.seerema.shared.jpa.base.service.BaseEntityService;
 import com.seerema.shared.rest.response.BaseResponse;
@@ -72,7 +73,8 @@ public class RegionCatalogController extends BaseController {
     return _service.updateEntity(region);
   }
 
-  @RequestMapping(value = "/region/{id}", method = RequestMethod.DELETE)
+  @RequestMapping(value = RestBaseConstants.PRIVATE_URL + "/region/{id}",
+      method = RequestMethod.DELETE)
   public BaseResponse delete(@PathVariable Integer id) throws WsSrvException {
     return _service.deleteEntity(id);
   }

@@ -14,10 +14,8 @@ package com.seerema.shared.jpa.base.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Service;
 
 import com.seerema.shared.dto.FieldDto;
-import com.seerema.shared.dto.ModuleDto;
 import com.seerema.shared.jpa.base.model.Field;
 import com.seerema.shared.jpa.base.repo.FieldRepo;
 import com.seerema.shared.jpa.base.shared.ErrorCodes;
@@ -25,19 +23,17 @@ import com.seerema.shared.jpa.base.shared.ErrorCodes;
 /**
  * Implementation for Field Service
  */
-@Service
-public class FieldServiceImpl
+public abstract class AbstractFieldServiceImpl
     extends AbstractEntityServiceImpl<Field, FieldDto> {
 
   @Autowired
   private FieldRepo _repo;
 
-  @Autowired
-  private ModuleDto _mod;
+  protected abstract int getModuleId();
 
   @Override
   protected Iterable<Field> findAll() {
-    return _repo.findAllByFieldCatModuleId(_mod.getId());
+    return _repo.findAllByFieldCatModuleId(getModuleId());
   }
 
   @Override

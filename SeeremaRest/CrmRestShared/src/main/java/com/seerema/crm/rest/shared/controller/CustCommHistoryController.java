@@ -73,7 +73,7 @@ public class CustCommHistoryController extends BaseController {
     return _service.updateEntity(cch, getUserName(req), false);
   }
 
-  @RequestMapping(value = "/cust_comm_history/{id}",
+  @RequestMapping(value = "/private/cust_comm_history/{id}",
       method = RequestMethod.DELETE)
   public BaseResponse delete(@PathVariable Integer id) throws WsSrvException {
     return _service.deleteEntity(id);

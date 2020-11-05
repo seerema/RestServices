@@ -12,20 +12,36 @@
 
 package com.seerema.task.rest.shared.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.seerema.rest.entity.shared.controller.FieldCategoryController;
+import com.seerema.rest.entity.shared.controller.AbstractFieldCategoryController;
+import com.seerema.shared.dto.FieldCategoryDto;
+import com.seerema.shared.jpa.base.model.FieldCategory;
+import com.seerema.shared.jpa.base.service.BaseEntityService;
 import com.seerema.task.srv.shared.TaskConstants;
 
 /**
  * FieldCategory REST API
  *
  */
+
 @Validated
 @RestController
 @RequestMapping("/" + TaskConstants.MODULE_NAME)
-public class TaskFieldCategoryController extends FieldCategoryController {
+public class TaskFieldCategoryController
+    extends AbstractFieldCategoryController {
 
+  @Autowired
+  @Qualifier("field_cat_" + TaskConstants.MODULE_NAME)
+  private BaseEntityService<FieldCategory, FieldCategoryDto> _service;
+
+  @Override
+  protected BaseEntityService<FieldCategory, FieldCategoryDto>
+      getFieldCatService() {
+    return _service;
+  }
 }

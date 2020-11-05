@@ -13,11 +13,14 @@
 package com.seerema.catalog.srv;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import com.seerema.base.WsSrvException;
 import com.seerema.catalog.srv.shared.CatalogConstants;
+import com.seerema.shared.dto.ModuleDto;
 import com.seerema.shared.jpa.base.AbstractJpaConfiguration;
 
 /**
@@ -31,8 +34,8 @@ import com.seerema.shared.jpa.base.AbstractJpaConfiguration;
 @ComponentScan("com.seerema.catalog.srv")
 public class AutoConfiguration extends AbstractJpaConfiguration {
 
-  @Override
-  protected String getModuleName() {
-    return CatalogConstants.MODULE_NAME;
+  @Bean("mod_" + CatalogConstants.MODULE_NAME)
+  protected ModuleDto getModule() throws WsSrvException {
+    return getModule(CatalogConstants.MODULE_NAME);
   }
 }

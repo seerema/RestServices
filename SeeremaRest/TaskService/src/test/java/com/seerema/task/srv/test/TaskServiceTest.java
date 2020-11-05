@@ -56,9 +56,13 @@ public class TaskServiceTest extends AbstractEntityStatusServiceTest {
   protected void runCheck(int idx) throws WsSrvException {
     switch (idx) {
     case 1:
-      // Get list of user's 
+      // Get list of user's active tasks
       checkEntitiesList(questSrv.readUserActiveQuests(Constants.ANONYMOUS_USER),
           2, "UserActiveQuests");
+
+      // Get list of user's all tasks
+      checkEntitiesList(questSrv.readAllActiveQuests(), 2, "AllActiveQuests");
+
       break;
 
     case 2:
@@ -79,8 +83,28 @@ public class TaskServiceTest extends AbstractEntityStatusServiceTest {
       checkEntitiesList(questSrv.readAllActiveQuests(), 2, "UserActiveQuests");
 
       break;
+
+    case 3:
+      // Get list of user's active tasks
+      checkEntitiesList(questSrv.readUserActiveQuests(Constants.ANONYMOUS_USER),
+          2, "UserActiveQuests");
+      break;
+
+    // Status changed
+    case 4:
+      // Get list of user's active tasks
+      checkEntitiesList(questSrv.readUserActiveQuests(Constants.ANONYMOUS_USER),
+          1, "UserActiveQuests");
+
+      checkEntitiesList(questSrv.readAllActiveQuests(), 1, "AllUserQuests");
+
+      // Get list of user's all tasks
+      checkEntitiesList(questSrv.readEntities(Constants.ANONYMOUS_USER), 2,
+          "AllUserQuests");
+      break;
+
     default:
-      throw new WsSrvException("=1", "Unknow run index #" + idx);
+      // Do nothing
     }
   }
 }

@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.seerema.catalog.rest.shared.CatalogRestTestConstants;
+import com.seerema.rest.shared.base.common.RestBaseConstants;
 import com.seerema.rest.entity.shared.test.AbstractEntityControllerTest;
 import com.seerema.shared.dto.EntityDto;
 import com.seerema.shared.rest.response.DataGoodResponse;
@@ -64,5 +65,10 @@ public class BusinessInfoControllerTest
   @Override
   protected EntityDto getEntity() {
     return new EntityDto();
+  }
+
+  @Override
+  protected String getSecurityPrefix() {
+    return RestBaseConstants.SECURITY_PREFIX_URL;
   }
 }

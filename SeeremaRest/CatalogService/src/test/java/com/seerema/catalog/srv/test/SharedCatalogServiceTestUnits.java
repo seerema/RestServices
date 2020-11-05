@@ -33,9 +33,7 @@ import com.seerema.catalog.srv.jpa.repo.CityRepo;
 import com.seerema.catalog.srv.jpa.repo.CountryRepo;
 import com.seerema.catalog.srv.jpa.repo.RegionRepo;
 import com.seerema.shared.dto.EntityDto;
-import com.seerema.shared.dto.EntityFieldDto;
 import com.seerema.shared.jpa.base.model.DbEntity;
-import com.seerema.shared.jpa.base.model.EntityField;
 import com.seerema.shared.jpa.base.repo.DbEntityRepo;
 import com.seerema.shared.jpa.base.repo.EntityFieldRepo;
 import com.seerema.shared.jpa.base.repo.FieldCategoryRepo;
@@ -92,9 +90,6 @@ public class SharedCatalogServiceTestUnits {
   @Autowired
   private EntityFieldRepo entityFieldRepo;
 
-  @Autowired
-  private BaseEntityService<EntityField, EntityFieldDto> entityFieldSrv;
-
   public BaseEntityService<Country, CountryDto> getCountrySrv() {
     return countrySrv;
   }
@@ -113,10 +108,6 @@ public class SharedCatalogServiceTestUnits {
 
   public EntityService<DbEntity, EntityDto> getEntitySrv() {
     return entitySrv;
-  }
-
-  public BaseEntityService<EntityField, EntityFieldDto> getEntityFieldSrv() {
-    return entityFieldSrv;
   }
 
   @AfterEach

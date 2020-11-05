@@ -13,10 +13,13 @@
 package com.seerema.task.srv;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import com.seerema.base.WsSrvException;
+import com.seerema.shared.dto.ModuleDto;
 import com.seerema.shared.jpa.base.AbstractJpaConfiguration;
 import com.seerema.task.srv.shared.TaskConstants;
 
@@ -31,9 +34,8 @@ import com.seerema.task.srv.shared.TaskConstants;
 @ComponentScan("com.seerema.task.srv")
 public class AutoConfiguration extends AbstractJpaConfiguration {
 
-  @Override
-  protected String getModuleName() {
-    return TaskConstants.MODULE_NAME;
+  @Bean("mod_" + TaskConstants.MODULE_NAME)
+  protected ModuleDto getModule() throws WsSrvException {
+    return getModule(TaskConstants.MODULE_NAME);
   }
-
 }

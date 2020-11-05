@@ -22,7 +22,7 @@
 		<java.version>1.8</java.version>
 		<skipTests>true</skipTests>
 		<skipITs>true</skipITs>
-		<seerema-rest.version>2.0.0</seerema-rest.version>
+		<seerema-rest.version>2.2.0</seerema-rest.version>
 	</properties>
 
 	<dependencies>

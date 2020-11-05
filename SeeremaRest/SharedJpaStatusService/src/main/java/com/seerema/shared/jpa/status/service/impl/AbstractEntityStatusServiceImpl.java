@@ -28,7 +28,6 @@ import com.seerema.shared.dto.EntityDto;
 import com.seerema.shared.dto.EntityExDto;
 import com.seerema.shared.dto.EntityStatusHistoryDto;
 import com.seerema.shared.dto.EntityUserHistoryDto;
-import com.seerema.shared.dto.ModuleDto;
 import com.seerema.shared.dto.StatusDto;
 import com.seerema.shared.jpa.base.model.DbEntity;
 import com.seerema.shared.jpa.base.model.User;
@@ -60,8 +59,8 @@ public abstract class AbstractEntityStatusServiceImpl
 
   protected abstract String getNewStatus();
 
-  @Autowired
-  private EntityService<DbEntity, EntityDto> _srv;
+  // @Autowired
+  // private EntityService<DbEntity, EntityDto> _srv;
 
   @Autowired
   private EntityExRepo _repo;
@@ -75,8 +74,9 @@ public abstract class AbstractEntityStatusServiceImpl
   @Autowired
   private EntityUserHistoryRepo _uhrepo;
 
-  @Autowired
-  private ModuleDto _mod;
+  protected abstract int getModuleId();
+
+  protected abstract EntityService<DbEntity, EntityDto> getEntityService();
 
   @Override
   public DataGoodResponse createEntity(EntityExDto dto) throws WsSrvException {
@@ -124,7 +124,8 @@ public abstract class AbstractEntityStatusServiceImpl
     Iterable<EntityEx> entities;
 
     try {
-      entities = _repo.findAllByUserName(username);
+      entities =
+          _repo.findAllByUserNameAndDbEntityModuleId(username, getModuleId());
     } catch (DataAccessException e) {
       throw throwError(ErrorCodes.ERROR_READ_ENTITIES_EX_USER.name(), e);
     }
@@ -163,14 +164,14 @@ public abstract class AbstractEntityStatusServiceImpl
     super.deleteEntity(id);
 
     // Delete slave record
-    return _srv.deleteEntity(id);
+    return getEntityService().deleteEntity(id);
   }
 
   @Transactional
   private DataGoodResponse createEntityEx(EntityExDto dto, String userName)
       throws WsSrvException {
     // Find ID for new status
-    Status status = _srepo.findByNameAndModuleId(getNewStatus(), _mod.getId());
+    Status status = _srepo.findByNameAndModuleId(getNewStatus(), getModuleId());
 
     // Inject new status and status history
     dto.setStatus(new StatusDto(status.getId()));
@@ -180,7 +181,7 @@ public abstract class AbstractEntityStatusServiceImpl
     EntityEx entity = insertUser(dto, owner);
 
     // First save slave entity
-    DbEntity dbe = _srv.createRawEntity(entity.getDbEntity());
+    DbEntity dbe = getEntityService().createRawEntity(entity.getDbEntity());
     entity.setId(dbe.getId());
 
     // Save master entity after
@@ -218,7 +219,7 @@ public abstract class AbstractEntityStatusServiceImpl
             : sdata.getUser());
 
     // First save slave entity
-    DbEntity dbe = _srv.updateEntity(entity.getDbEntity());
+    DbEntity dbe = getEntityService().updateEntity(entity.getDbEntity());
     entity.setDbEntity(dbe);
 
     // After that save master entity
@@ -270,7 +271,7 @@ public abstract class AbstractEntityStatusServiceImpl
 
   @Override
   protected Iterable<EntityEx> findAll() {
-    return _repo.findAllByDbEntityModuleId(_mod.getId());
+    return _repo.findAllByDbEntityModuleId(getModuleId());
   }
 
   @Override

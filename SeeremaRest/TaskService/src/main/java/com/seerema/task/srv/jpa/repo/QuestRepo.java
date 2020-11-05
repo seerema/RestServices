@@ -26,12 +26,12 @@ public interface QuestRepo extends CrudRepository<EntityEx, Integer> {
 
   @Query("SELECT e FROM EntityEx e, Status s, Module m, User u WHERE m.name = '" +
       TaskConstants.MODULE_NAME + "' AND s.module = m AND " +
-      "s.name IN ?1 AND e.status = s AND e.user = u AND u.name = ?2 ORDER BY e.dbEntity.name")
+      "s.name IN ?1 AND e.status = s AND e.user = u AND u.name = ?2")
   Iterable<EntityEx> findUserActiveQuests(List<String> statuses,
       String userName);
 
   @Query("SELECT e FROM EntityEx e, Status s, Module m WHERE m.name = '" +
       TaskConstants.MODULE_NAME + "' AND s.module = m AND " +
-      "s.name IN ?1 AND e.status = s ORDER BY e.dbEntity.name")
+      "s.name IN ?1 AND e.status = s")
   Iterable<EntityEx> findAllActiveQuests(List<String> statuses);
 }

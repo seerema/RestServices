@@ -26,5 +26,6 @@ public interface EntityExRepo extends CrudRepository<EntityEx, Integer> {
 
   Optional<EntityEx> findByIdAndUserName(Integer id, String username);
 
-  Iterable<EntityEx> findAllByUserName(String username);
+  Iterable<EntityEx> findAllByUserNameAndDbEntityModuleId(String username,
+      int moduleId);
 }

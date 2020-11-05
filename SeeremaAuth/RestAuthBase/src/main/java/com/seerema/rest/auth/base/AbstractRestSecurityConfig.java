@@ -12,7 +12,6 @@
 
 package com.seerema.rest.auth.base;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
@@ -39,26 +38,10 @@ public abstract class AbstractRestSecurityConfig
         .and().antMatcher("/" + getModuleName() + "/**")
         .authorizeRequests()
  
-        /************* Quest API *************/
-
-        // All entities view restriction
-        .antMatchers(HttpMethod.GET,
-            "/" + getModuleName() + "/entities/all").
-            hasAnyRole("SBS_MANAGER","SBS_ADMIN")
-        
-        // Restrict any entity delete
-        .antMatchers(HttpMethod.DELETE, 
-            "/" + getModuleName() +"/entity/{\\d+}").
-            hasAnyRole("SBS_MANAGER","SBS_ADMIN")
-        .antMatchers(HttpMethod.DELETE, 
-            "/" + getModuleName() +"/entity_field/{\\d+}").
-            hasAnyRole("SBS_MANAGER","SBS_ADMIN")
-            
         /************* PRIVATE API *************/
 
         // All private api
-        .antMatchers(HttpMethod.GET,
-            "/" + getModuleName() + "/private/**").
+        .antMatchers("/" + getModuleName() + "/private/**").
             hasAnyRole("SBS_MANAGER", "SBS_ADMIN")
         
         /************* ADMIN API *************/

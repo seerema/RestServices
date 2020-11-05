@@ -125,10 +125,12 @@ public class CatalogRestAuthTest extends SharedRestTestUnits {
     address.setId(1);
 
     // Create Field Category
+    prepAdminSecuritySession();
+    HttpHeaders admin_headers = prepHttpHeaders();
     FieldCategoryDto fcat = new FieldCategoryDto();
     fcat.setName("LL_TEST");
     checkEntity(
-        new RequestEntity<FieldCategoryDto>(fcat, headers, HttpMethod.PUT,
+        new RequestEntity<FieldCategoryDto>(fcat, admin_headers, HttpMethod.PUT,
             new URI(BASE_URL + "/admin/field_cat")),
         "field_cat", "{\"id\":1,\"name\":\"LL_TEST\",\"read_only\":false}");
     fcat.setId(1);
@@ -138,8 +140,8 @@ public class CatalogRestAuthTest extends SharedRestTestUnits {
     field.setName("Item");
     field.setFieldCat(fcat);
     checkEntity(
-        new RequestEntity<FieldDto>(
-            field, headers, HttpMethod.PUT, new URI(BASE_URL + "/admin/field")),
+        new RequestEntity<FieldDto>(field, admin_headers, HttpMethod.PUT,
+            new URI(BASE_URL + "/admin/field")),
         "field",
         "{\"id\":1," +
             "\"name\":\"Item\",\"field_cat\":{\"id\":1,\"name\":\"LL_TEST\"," +

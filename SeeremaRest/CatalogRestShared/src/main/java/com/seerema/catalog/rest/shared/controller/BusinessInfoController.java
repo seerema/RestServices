@@ -15,6 +15,7 @@ package com.seerema.catalog.rest.shared.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.seerema.base.WsSrvException;
 import com.seerema.catalog.srv.shared.CatalogConstants;
+import com.seerema.rest.shared.base.common.RestBaseConstants;
 import com.seerema.rest.shared.base.controller.BaseController;
 import com.seerema.shared.dto.EntityDto;
 import com.seerema.shared.jpa.base.model.DbEntity;
@@ -42,6 +44,7 @@ import com.seerema.shared.rest.response.DataGoodResponse;
 public class BusinessInfoController extends BaseController {
 
   @Autowired
+  @Qualifier("entity_" + CatalogConstants.MODULE_NAME)
   private EntityService<DbEntity, EntityDto> _service;
 
   @RequestMapping(value = "/entity", method = RequestMethod.PUT,
@@ -72,7 +75,8 @@ public class BusinessInfoController extends BaseController {
     return _service.updateEntity(business_info);
   }
 
-  @RequestMapping(value = "/entity/{id}", method = RequestMethod.DELETE)
+  @RequestMapping(value = RestBaseConstants.PRIVATE_URL + "/entity/{id}",
+      method = RequestMethod.DELETE)
   public BaseResponse delete(@PathVariable Integer id) throws WsSrvException {
     return _service.deleteEntity(id);
   }

@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.seerema.crm.srv.dto.CustCommHistoryDto;
 import com.seerema.crm.srv.shared.CrmConstants;
+import com.seerema.rest.shared.base.common.RestBaseConstants;
 import com.seerema.rest.shared.base.rest.AbstractSharedEntityControllerTest;
 import com.seerema.shared.dto.CommMediaDto;
 import com.seerema.shared.dto.EntityExDto;
@@ -141,5 +142,10 @@ public class CustCommHistoryControllerTest
   protected boolean isDupError() {
     // Duplicated records are allowed for CustCommHistory
     return false;
+  }
+
+  @Override
+  protected String getSecurityPrefix() {
+    return RestBaseConstants.SECURITY_PREFIX_URL;
   }
 }

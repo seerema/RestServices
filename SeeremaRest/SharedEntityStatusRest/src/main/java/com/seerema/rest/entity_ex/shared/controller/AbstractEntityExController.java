@@ -15,7 +15,6 @@ package com.seerema.rest.entity_ex.shared.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,10 +32,10 @@ import com.seerema.shared.rest.response.DataGoodResponse;
 /**
  * Entity REST API
  */
-public class EntityExController extends BaseController {
+public abstract class AbstractEntityExController extends BaseController {
 
-  @Autowired
-  private EntityStatusService<EntityEx, EntityExDto> _service;
+  protected abstract EntityStatusService<EntityEx, EntityExDto>
+      getEntityStatusService();
 
   /****************** USER API ******************/
 
@@ -45,21 +44,21 @@ public class EntityExController extends BaseController {
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public DataGoodResponse create(@Valid @RequestBody EntityExDto entity,
       HttpServletRequest req) throws WsSrvException {
-    return _service.createEntity(entity, getUserName(req));
+    return getEntityStatusService().createEntity(entity, getUserName(req));
   }
 
   @RequestMapping(value = "/entities", method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DataGoodResponse readUserEntities(HttpServletRequest req)
       throws WsSrvException {
-    return _service.readEntities(getUserName(req));
+    return getEntityStatusService().readEntities(getUserName(req));
   }
 
   @RequestMapping(value = "/entity/{id}", method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DataGoodResponse read(@PathVariable Integer id, HttpServletRequest req)
       throws WsSrvException {
-    return _service.readEntity(id, getUserName(req));
+    return getEntityStatusService().readEntity(id, getUserName(req));
   }
 
   @RequestMapping(value = "/entity/{id}", method = RequestMethod.POST,
@@ -67,12 +66,8 @@ public class EntityExController extends BaseController {
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public BaseResponse update(@Valid @RequestBody EntityExDto entity,
       HttpServletRequest req) throws WsSrvException {
-    return _service.updateEntity(entity, getUserName(req), false);
-  }
-
-  @RequestMapping(value = "/entity/{id}", method = RequestMethod.DELETE)
-  public BaseResponse delete(@PathVariable Integer id) throws WsSrvException {
-    return _service.deleteEntity(id);
+    return getEntityStatusService().updateEntity(entity, getUserName(req),
+        false);
   }
 
   /****************** PRIVATE API ******************/
@@ -80,14 +75,14 @@ public class EntityExController extends BaseController {
   @RequestMapping(value = "/private/entity/{id}", method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DataGoodResponse read(@PathVariable Integer id) throws WsSrvException {
-    return _service.readEntity(id);
+    return getEntityStatusService().readEntity(id);
   }
 
   @RequestMapping(value = "/private/entities", method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DataGoodResponse readEntities(HttpServletRequest req)
       throws WsSrvException {
-    return _service.readEntities();
+    return getEntityStatusService().readEntities();
   }
 
   @RequestMapping(value = "/private/entity/{id}", method = RequestMethod.POST,
@@ -95,6 +90,12 @@ public class EntityExController extends BaseController {
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public BaseResponse updateRestricted(@Valid @RequestBody EntityExDto entity,
       HttpServletRequest req) throws WsSrvException {
-    return _service.updateEntity(entity, getUserName(req), true);
+    return getEntityStatusService().updateEntity(entity, getUserName(req),
+        true);
+  }
+
+  @RequestMapping(value = "/private/entity/{id}", method = RequestMethod.DELETE)
+  public BaseResponse delete(@PathVariable Integer id) throws WsSrvException {
+    return getEntityStatusService().deleteEntity(id);
   }
 }

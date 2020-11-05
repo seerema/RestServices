@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.seerema.rest.shared.base.common.RestBaseConstants;
 import com.seerema.rest.entity.shared.test.AbstractEntityControllerTest;
 import com.seerema.shared.dto.EntityExDto;
 import com.seerema.shared.dto.EntityFieldDto;
@@ -93,5 +94,10 @@ public class EntityExControllerTest
     assertEquals(size, list.size());
 
     return list;
+  }
+
+  @Override
+  protected String getSecurityPrefix() {
+    return RestBaseConstants.SECURITY_PREFIX_URL;
   }
 }

@@ -91,8 +91,6 @@ public class CatalogServiceTest extends SharedCatalogServiceTestUnits {
 
     testField();
 
-    testEntityField();
-
     testCompany();
 
     // Test all chain
@@ -102,18 +100,6 @@ public class CatalogServiceTest extends SharedCatalogServiceTestUnits {
     testBusinessInfo();
 
     testCommMedia();
-  }
-
-  private void testEntityField() throws WsSrvException {
-    // Read EntityField Field
-    EntityFieldDto cfield = SharedJpaTestUtils.checkNonEmptyGoodResponse(
-        getEntityFieldSrv().readEntity(1), 1, EntityFieldDto.class);
-    assertEquals("http://www.example.com/", cfield.getValue(),
-        "BusinessInfo Field value not found.");
-
-    // Saving back test skipped because it cannot be saved alone and
-    // must be saved together with entity
-
   }
 
   private void testCompany() throws WsSrvException {
